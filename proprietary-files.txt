@@ -19,7 +19,13 @@ odm/overlayfs_origin/vendor/etc/init/android.hardware.weaver-service.thales.rc
 
 # Thermal
 system_ext/bin/sltntc
-vendor/bin/hw/android.hardware.thermal-service.qti
+vendor/bin/hw/android.hardware.thermal-service.qti;MODULE_SUFFIX=.stock
+
+# Vibrator (stock AW86938/RichTap stack; source module in
+# vendor/qcom/opensource/vibrator is disabled via soong_config metroid.stock_vibrator)
+vendor/bin/hw/vendor.qti.hardware.vibrator.service;MODULE_SUFFIX=.stock
+vendor/etc/init/vendor.qti.hardware.vibrator.service.rc
+vendor/etc/vintf/manifest/vendor.qti.hardware.vibrator.service.xml
 
 # QCC
 system_ext/app/QCC/QCC.apk:system_ext/priv-app/QCC/QCC.apk;PRESIGNED
@@ -4047,7 +4053,7 @@ vendor/product/media/audio/alarms/07_fidget.ogg
 vendor/product/media/audio/alarms/08_saw.ogg
 vendor/product/media/audio/alarms/09_grains.ogg
 vendor/product/media/audio/alarms/10_shake.ogg
-vendor/product/media/audio/notifications/01_oi.ogg
+vendor/product/media/audio/notifications/01_oi!.ogg
 vendor/product/media/audio/notifications/02_swanny.ogg
 vendor/product/media/audio/notifications/03_doub.ogg
 vendor/product/media/audio/notifications/04_hum.ogg
