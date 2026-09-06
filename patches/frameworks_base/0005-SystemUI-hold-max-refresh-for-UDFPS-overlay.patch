@@ -1,9 +1,19 @@
-From 6664380ce9a45f3da91633ff2758050fbff845df Mon Sep 17 00:00:00 2001
-From: Your Name <your.email@example.com>
+From a5b009fb2e257e75a8a9803149e6a97be8de479f Mon Sep 17 00:00:00 2001
+From: logix727 <logix727@users.noreply.github.com>
 Date: Fri, 14 Aug 2026 18:44:00 -0400
-Subject: [PATCH 4/5] SystemUI: hold max refresh for UDFPS overlay
+Subject: [PATCH 5/5] SystemUI: hold max refresh for UDFPS overlay
 
-Change-Id: Icfcf4468316a05a1292933a6bcd95e54b88361b1
+[metroid/evo] Rebased onto lineage-23.2. Upstream split show() into an overload
+pair, so the requestMaxRefreshRate() guard now goes in
+show(params, attachListener) -- the one that actually holds the body -- rather
+than the 1-arg delegate. The property declarations moved with the surrounding
+context. Everything else applied unchanged.
+
+Original patch was authored as "Your Name <your.email@example.com>"; kept the
+logix727 identity used by the rest of the series.
+
+Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01RTyThMzCkh5fd3Ct1JP62p
 ---
  .../SystemUI/res/values/lineage_config.xml    |  3 ++
  .../systemui/biometrics/AuthController.java   |  1 +
@@ -13,7 +23,7 @@ Change-Id: Icfcf4468316a05a1292933a6bcd95e54b88361b1
  5 files changed, 91 insertions(+)
 
 diff --git a/packages/SystemUI/res/values/lineage_config.xml b/packages/SystemUI/res/values/lineage_config.xml
-index ccb178f5d..15b46ec5c 100644
+index 5844a3dd1..611455e50 100644
 --- a/packages/SystemUI/res/values/lineage_config.xml
 +++ b/packages/SystemUI/res/values/lineage_config.xml
 @@ -21,6 +21,9 @@
@@ -27,10 +37,10 @@ index ccb178f5d..15b46ec5c 100644
           Each entry is in the format <brightness>,<alpha> where:
             - brightness = panel backlight level
 diff --git a/packages/SystemUI/src/com/android/systemui/biometrics/AuthController.java b/packages/SystemUI/src/com/android/systemui/biometrics/AuthController.java
-index f2c071f14..3f43b42ef 100644
+index 201c80537..04c578ca5 100644
 --- a/packages/SystemUI/src/com/android/systemui/biometrics/AuthController.java
 +++ b/packages/SystemUI/src/com/android/systemui/biometrics/AuthController.java
-@@ -294,6 +294,7 @@ public class AuthController implements
+@@ -306,6 +306,7 @@ public class AuthController implements
          mUdfpsProps = !udfpsProps.isEmpty() ? udfpsProps : null;
          if (mUdfpsProps != null) {
              mUdfpsController = mUdfpsControllerFactory.get();
@@ -39,10 +49,10 @@ index f2c071f14..3f43b42ef 100644
                  @Override
                  public void onFingerUp() {
 diff --git a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsController.java b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsController.java
-index 718615d9f..3714e4348 100644
+index 28aff39e4..c15f37ce7 100644
 --- a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsController.java
 +++ b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsController.java
-@@ -198,6 +198,11 @@ public class UdfpsController implements DozeReceiver, Dumpable {
+@@ -213,6 +213,11 @@ public class UdfpsController implements DozeReceiver, Dumpable {
      // TODO(b/229290039): UDFPS controller should manage its dimensions on its own. Remove this.
      @Nullable private Runnable mAuthControllerUpdateUdfpsLocation;
      @Nullable private UdfpsDisplayModeProvider mUdfpsDisplayMode;
@@ -54,7 +64,7 @@ index 718615d9f..3714e4348 100644
  
      // The ID of the pointer for which ACTION_DOWN has occurred. -1 means no pointer is active.
      private int mActivePointerId = MotionEvent.INVALID_POINTER_ID;
-@@ -283,6 +288,7 @@ public class UdfpsController implements DozeReceiver, Dumpable {
+@@ -383,6 +388,7 @@ public class UdfpsController implements DozeReceiver, Dumpable {
                          mKeyguardUpdateMonitor,
                          mKeyguardStateController,
                          mUdfpsDisplayMode,
@@ -63,10 +73,10 @@ index 718615d9f..3714e4348 100644
                          reason,
                          callback,
 diff --git a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsControllerOverlay.kt b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsControllerOverlay.kt
-index 0ec0a91eb..b76323d03 100644
+index ffdb27411..e768b6264 100644
 --- a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsControllerOverlay.kt
 +++ b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsControllerOverlay.kt
-@@ -77,6 +77,7 @@ constructor(
+@@ -82,6 +82,7 @@ constructor(
      private val keyguardUpdateMonitor: KeyguardUpdateMonitor,
      private val keyguardStateController: KeyguardStateController,
      private var udfpsDisplayModeProvider: UdfpsDisplayModeProvider,
@@ -74,7 +84,7 @@ index 0ec0a91eb..b76323d03 100644
      val requestId: Long,
      @RequestReason val requestReason: Int,
      private val controllerCallback: IUdfpsOverlayControllerCallback,
-@@ -117,6 +118,9 @@ constructor(
+@@ -124,6 +125,9 @@ constructor(
      private val useFrameworkDimming = context.resources.getBoolean(
          com.android.systemui.res.R.bool.config_udfpsFrameworkDimming
      )
@@ -83,18 +93,18 @@ index 0ec0a91eb..b76323d03 100644
 +    private var maxRefreshRateRequested = false
  
      private val udfpsHelper: UdfpsHelper? = if (useFrameworkDimming) {
-         UdfpsHelper(context, windowManager, shadeInteractor, requestReason)
-@@ -159,6 +163,9 @@ constructor(
+         UdfpsHelper(context, windowManager, shadeInteractor, requestReason,
+@@ -309,6 +313,9 @@ constructor(
      @SuppressLint("ClickableViewAccessibility")
-     fun show(params: UdfpsOverlayParams): Boolean {
+     fun show(params: UdfpsOverlayParams, attachListener: OnAttachStateChangeListener?): Boolean {
          if (getTouchOverlay() == null) {
 +            if (!requestMaxRefreshRate()) {
 +                return false
 +            }
              overlayParams = params
+             overlayAttachStateListener = attachListener
              sensorBounds = Rect(params.sensorBounds)
-             try {
-@@ -217,6 +224,11 @@ constructor(
+@@ -383,6 +390,11 @@ constructor(
                  }
              } catch (e: RuntimeException) {
                  Log.e(TAG, "showUdfpsOverlay | failed to add window", e)
@@ -106,7 +116,7 @@ index 0ec0a91eb..b76323d03 100644
              }
              return true
          }
-@@ -291,10 +303,39 @@ constructor(
+@@ -510,10 +522,39 @@ constructor(
          overlayTouchView = null
          overlayTouchListener = null
          listenForCurrentKeyguardState?.cancel()
@@ -240,5 +250,5 @@ index 31e457b0c..83b86fd43 100644
      fun matchesRequestIds() =
          withReason(REASON_AUTH_BP) {
 -- 
-2.43.0
+2.55.0
 

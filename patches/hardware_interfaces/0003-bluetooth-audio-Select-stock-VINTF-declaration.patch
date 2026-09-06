@@ -1,15 +1,19 @@
-From 9218ce5c94032ca225102175614d5f8b09bf39d9 Mon Sep 17 00:00:00 2001
+From a8920f8eed3cc05e4464993e69bffae7d528cddd Mon Sep 17 00:00:00 2001
 From: logix727 <logix727@users.noreply.github.com>
 Date: Tue, 4 Aug 2026 08:34:03 -0400
 Subject: [PATCH 3/3] bluetooth: audio: Select stock VINTF declaration
 
-Change-Id: I2cb5bb373d4fe5cede0a4383462365af6d4e02ca
+[metroid/evo] Rebased onto lineage-23.2; only context moved (upstream added
+aconfig_lib_cc_static_link.defaults to the defaults list). Change is identical.
+
+Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01RTyThMzCkh5fd3Ct1JP62p
 ---
  bluetooth/audio/aidl/default/Android.bp | 5 ++++-
  1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/bluetooth/audio/aidl/default/Android.bp b/bluetooth/audio/aidl/default/Android.bp
-index af6bf86d..3ae4a0aa 100644
+index c2cc681..2f34577 100644
 --- a/bluetooth/audio/aidl/default/Android.bp
 +++ b/bluetooth/audio/aidl/default/Android.bp
 @@ -10,7 +10,10 @@ package {
@@ -22,7 +26,8 @@ index af6bf86d..3ae4a0aa 100644
 +        default: ["bluetooth_audio.xml"],
 +    }),
      defaults: [
+         "aconfig_lib_cc_static_link.defaults",
          "latest_android_hardware_bluetooth_audio_ndk_shared",
-     ],
 -- 
-2.43.0
+2.55.0
+

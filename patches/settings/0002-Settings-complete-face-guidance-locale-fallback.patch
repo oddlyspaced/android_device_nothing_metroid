@@ -1,7 +1,7 @@
-From 2ba75ba2e13865678c2d28aa383dde311517d37e Mon Sep 17 00:00:00 2001
+From 6f2412b5e8f0597088fc98de973e1cc5827b69c1 Mon Sep 17 00:00:00 2001
 From: logix727 <mbstober@gmail.com>
 Date: Wed, 12 Aug 2026 14:21:49 -0400
-Subject: [PATCH] Settings: complete face guidance locale fallback
+Subject: [PATCH 2/3] Settings: complete face guidance locale fallback
 
 Change-Id: I6559a5c9c0da2431149a46bd10b317c2f8c69ec7
 ---
@@ -16,10 +16,10 @@ Change-Id: I6559a5c9c0da2431149a46bd10b317c2f8c69ec7
  create mode 100644 tests/unit/src/com/android/settings/biometrics/face/FaceEnrollTextUtilsTest.java
 
 diff --git a/res/layout/face_enroll_introduction.xml b/res/layout/face_enroll_introduction.xml
-index 8b03529..6563aaa 100644
+index 37c2812..aaeaea9 100644
 --- a/res/layout/face_enroll_introduction.xml
 +++ b/res/layout/face_enroll_introduction.xml
-@@ -61,6 +61,7 @@
+@@ -62,6 +62,7 @@
  
              <!-- Keep in mind -->
              <TextView
@@ -27,7 +27,7 @@ index 8b03529..6563aaa 100644
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  style="@style/BiometricEnrollIntroTitle"
-@@ -153,6 +154,7 @@
+@@ -154,6 +155,7 @@
  
              <!-- How it works -->
              <TextView
@@ -35,7 +35,7 @@ index 8b03529..6563aaa 100644
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  style="@style/BiometricEnrollIntroTitle"
-@@ -182,4 +184,4 @@
+@@ -183,4 +185,4 @@
  
      </LinearLayout>
  
@@ -57,10 +57,10 @@ index b0b9488..3d3ac84 100644
          mSwitch.setChecked(false);
          mSwitch.setClickable(false);
 diff --git a/src/com/android/settings/biometrics/face/FaceEnrollEducation.java b/src/com/android/settings/biometrics/face/FaceEnrollEducation.java
-index b35e599..be9cad8 100644
+index b1407e9..e0541a6 100644
 --- a/src/com/android/settings/biometrics/face/FaceEnrollEducation.java
 +++ b/src/com/android/settings/biometrics/face/FaceEnrollEducation.java
-@@ -78,7 +78,8 @@ public class FaceEnrollEducation extends BiometricEnrollBase {
+@@ -97,7 +97,8 @@ public class FaceEnrollEducation extends BiometricEnrollBase {
                      final int descriptionRes = isChecked
                              ? R.string.security_settings_face_enroll_education_message_accessibility
                              : R.string.security_settings_face_enroll_education_message;
@@ -70,7 +70,7 @@ index b35e599..be9cad8 100644
  
                      if (isChecked) {
                          hideDefaultIllustration();
-@@ -113,7 +114,8 @@ public class FaceEnrollEducation extends BiometricEnrollBase {
+@@ -150,7 +151,8 @@ public class FaceEnrollEducation extends BiometricEnrollBase {
          setContentView(R.layout.face_enroll_education);
  
          setTitle(R.string.security_settings_face_enroll_education_title);
@@ -81,10 +81,10 @@ index b35e599..be9cad8 100644
          mFaceManager = Utils.getFaceManagerOrNull(this);
  
 diff --git a/src/com/android/settings/biometrics/face/FaceEnrollIntroduction.java b/src/com/android/settings/biometrics/face/FaceEnrollIntroduction.java
-index f594456..15afa5e 100644
+index 6f1fe2a..c3717f6 100644
 --- a/src/com/android/settings/biometrics/face/FaceEnrollIntroduction.java
 +++ b/src/com/android/settings/biometrics/face/FaceEnrollIntroduction.java
-@@ -148,18 +148,25 @@ public class FaceEnrollIntroduction extends BiometricEnrollIntroduction {
+@@ -149,18 +149,25 @@ public class FaceEnrollIntroduction extends BiometricEnrollIntroduction {
          // Set text for views with multiple variations.
          final TextView infoMessageGlasses = findViewById(R.id.info_message_glasses);
          final TextView infoMessageLooking = findViewById(R.id.info_message_looking);
@@ -116,7 +116,7 @@ index f594456..15afa5e 100644
  
          final ScrollView scrollView =
                  findViewById(com.google.android.setupdesign.R.id.sud_scroll_view);
-@@ -172,7 +179,8 @@ public class FaceEnrollIntroduction extends BiometricEnrollIntroduction {
+@@ -173,7 +180,8 @@ public class FaceEnrollIntroduction extends BiometricEnrollIntroduction {
              final TextView infoMessageRequireEyes = findViewById(R.id.info_message_require_eyes);
              infoRowRequireEyes.setVisibility(View.VISIBLE);
              iconRequireEyes.getBackground().setColorFilter(getIconColorFilter());
@@ -221,4 +221,5 @@ index 0000000..4f0dd59
 +    }
 +}
 -- 
-2.43.0
+2.55.0
+

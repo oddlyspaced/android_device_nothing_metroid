@@ -1,7 +1,7 @@
-From 52f2ed2334c2a0e0398fe43d58b05913532b8131 Mon Sep 17 00:00:00 2001
+From 950ad3c73704fdbdd08cbb9ebddc2586249b1eb4 Mon Sep 17 00:00:00 2001
 From: logix727 <mbstober@gmail.com>
 Date: Wed, 12 Aug 2026 14:21:49 -0400
-Subject: [PATCH] audio: bind AudioFX inert keepalive service
+Subject: [PATCH 2/5] audio: bind AudioFX inert keepalive service
 
 Change-Id: Ic580e6199de2893ed37b675584f838212af08df7
 ---
@@ -71,4 +71,5 @@ index d89cf7bb5..d4e4d0131 100644
      }
  
 -- 
-2.43.0
+2.55.0
+

@@ -1,7 +1,7 @@
-From e37118daa2ba496c6db14069bc304d412e470e61 Mon Sep 17 00:00:00 2001
+From 4e43fdfa7728fab757ae58ec65cce8b750b15380 Mon Sep 17 00:00:00 2001
 From: Your Name <your.email@example.com>
 Date: Fri, 21 Aug 2026 09:20:03 -0400
-Subject: [PATCH] recovery: report sideload install results to new hosts
+Subject: [PATCH 2/2] recovery: report sideload install results to new hosts
 
 Change-Id: I060c34053ecf718fddef6029ddc4c6d5001d3054
 ---
@@ -11,7 +11,7 @@ Change-Id: I060c34053ecf718fddef6029ddc4c6d5001d3054
  3 files changed, 86 insertions(+), 56 deletions(-)
 
 diff --git a/minadbd/README.md b/minadbd/README.md
-index 9a195830..0911ab2a 100644
+index 9a19583..0911ab2 100644
 --- a/minadbd/README.md
 +++ b/minadbd/README.md
 @@ -22,3 +22,13 @@ active at any given time.
@@ -29,7 +29,7 @@ index 9a195830..0911ab2a 100644
 +for failure. New hosts try v2 first and fall back to the legacy service when the
 +recovery does not implement it.
 diff --git a/minadbd/minadbd_services.cpp b/minadbd/minadbd_services.cpp
-index df562537..50561179 100644
+index df56253..5056117 100644
 --- a/minadbd/minadbd_services.cpp
 +++ b/minadbd/minadbd_services.cpp
 @@ -98,6 +98,7 @@ static bool WaitForCommandStatus(int fd, MinadbdCommandStatus* status) {
@@ -100,7 +100,7 @@ index df562537..50561179 100644
    return unique_fd{};
  }
 diff --git a/minadbd/minadbd_services_test.cpp b/minadbd/minadbd_services_test.cpp
-index b694a57d..be9f7d6c 100644
+index b694a57..be9f7d6 100644
 --- a/minadbd/minadbd_services_test.cpp
 +++ b/minadbd/minadbd_services_test.cpp
 @@ -112,6 +112,46 @@ class MinadbdServicesTest : public ::testing::Test {
@@ -224,5 +224,5 @@ index b694a57d..be9f7d6c 100644
 +              ::testing::ExitedWithCode(kMinadbdSuccess), "");
  }
 -- 
-2.43.0
+2.55.0
 

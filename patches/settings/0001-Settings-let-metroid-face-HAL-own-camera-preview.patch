@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 200c3f86dc849bebedb99a1e53030b0ad91edde5 Mon Sep 17 00:00:00 2001
 From: logix727 <logix727@users.noreply.github.com>
 Date: Tue, 4 Aug 2026 14:15:00 -0400
-Subject: [PATCH] Settings: let metroid face HAL own camera preview
+Subject: [PATCH 1/3] Settings: let metroid face HAL own camera preview
 
 Metroid has one front camera shared by Settings and Nothing's face HAL. The
 standard Settings enrollment flow opens that camera for preview while passing
@@ -14,9 +14,9 @@ Wait for the surface before starting enrollment so the HAL never receives a
 null or stale preview target. Other devices retain the existing Settings-owned
 preview path.
 ---
- .../biometrics/face/FaceEnrollEnrolling.java       |  7 +++++
- .../biometrics/face/FaceEnrollPreviewFragment.java | 35 +++++++++++++++++++---
- .../biometrics/face/FaceEnrollSidecar.java         | 29 ++++++++++++++++--
+ .../biometrics/face/FaceEnrollEnrolling.java  |  7 ++++
+ .../face/FaceEnrollPreviewFragment.java       | 35 ++++++++++++++++---
+ .../biometrics/face/FaceEnrollSidecar.java    | 29 +++++++++++++--
  3 files changed, 65 insertions(+), 6 deletions(-)
 
 diff --git a/src/com/android/settings/biometrics/face/FaceEnrollEnrolling.java b/src/com/android/settings/biometrics/face/FaceEnrollEnrolling.java
@@ -190,4 +190,5 @@ index b7ba1b5..e0d3dac 100644
  
      private FaceManager.EnrollmentCallback mEnrollmentCallback
 -- 
-2.43.0
+2.55.0
+

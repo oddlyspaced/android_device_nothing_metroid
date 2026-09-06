@@ -1,7 +1,7 @@
-From b39ef1faefe91a7b788d2ec78199c6bf0e8a5420 Mon Sep 17 00:00:00 2001
+From a397de539dbcad9fee56201e5fe7b031b9de84ca Mon Sep 17 00:00:00 2001
 From: logix727 <mbstober@gmail.com>
 Date: Thu, 13 Aug 2026 10:29:41 -0400
-Subject: [PATCH] adb: report complete sideload transfer progress
+Subject: [PATCH 1/2] adb: report complete sideload transfer progress
 
 Change-Id: Ie8bc9721651005c8b287ebca8be6004e5f69270b
 ---
@@ -14,10 +14,10 @@ Change-Id: Ie8bc9721651005c8b287ebca8be6004e5f69270b
  create mode 100644 client/sideload_progress_test.cpp
 
 diff --git a/Android.bp b/Android.bp
-index 2d31fa1..90061aa 100644
+index 088d2ec..3f6fdcd 100644
 --- a/Android.bp
 +++ b/Android.bp
-@@ -265,6 +265,7 @@ libadb_test_srcs = [
+@@ -256,6 +256,7 @@ libadb_test_srcs = [
      "adb_io_test.cpp",
      "adb_listeners_test.cpp",
      "adb_utils_test.cpp",
@@ -26,10 +26,10 @@ index 2d31fa1..90061aa 100644
      "shell_service_protocol.cpp",
      "socket_spec_test.cpp",
 diff --git a/client/commandline.cpp b/client/commandline.cpp
-index d7a517f..83e477c 100644
+index 5c9871d..b9e1d53 100644
 --- a/client/commandline.cpp
 +++ b/client/commandline.cpp
-@@ -64,6 +64,7 @@
+@@ -65,6 +65,7 @@ using namespace std::string_literals;
  #include "app_processes.pb.h"
  #include "bugreport.h"
  #include "client/file_sync_client.h"
@@ -37,7 +37,7 @@ index d7a517f..83e477c 100644
  #include "commandline.h"
  #include "fastdeploy.h"
  #include "incremental_server.h"
-@@ -926,6 +927,7 @@ static int adb_sideload_install(const char* filename, bool rescue_mode) {
+@@ -927,6 +928,7 @@ static int adb_sideload_install(const char* filename, bool rescue_mode) {
      char buf[SIDELOAD_HOST_BLOCK_SIZE];
  
      int64_t xfer = 0;
@@ -45,7 +45,7 @@ index d7a517f..83e477c 100644
      int last_percent = -1;
      while (true) {
          if (!ReadFdExactly(device_fd, buf, 8)) {
-@@ -976,15 +978,12 @@ static int adb_sideload_install(const char* filename, bool rescue_mode) {
+@@ -977,15 +979,12 @@ static int adb_sideload_install(const char* filename, bool rescue_mode) {
          }
          xfer += to_write;
  
@@ -173,4 +173,5 @@ index 0000000..98ed466
 +    EXPECT_EQ(100, progress.RecordBlock(2));
 +}
 -- 
-2.43.0
+2.55.0
+

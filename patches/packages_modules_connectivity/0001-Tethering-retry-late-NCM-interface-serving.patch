@@ -1,7 +1,7 @@
-From 21cd27ce4704930902c2468e5b979c314d4eb550 Mon Sep 17 00:00:00 2001
+From 95994f559a090ee107f0ed391b2d8e39b21bb781 Mon Sep 17 00:00:00 2001
 From: logix727 <mbstober@gmail.com>
 Date: Wed, 12 Aug 2026 18:57:32 -0400
-Subject: [PATCH] Tethering: retry late NCM interface serving
+Subject: [PATCH 1/2] Tethering: retry late NCM interface serving
 
 Change-Id: Iabe8408133d744dd36efce5f3762916a5c1fe5cf
 ---
@@ -10,10 +10,10 @@ Change-Id: Iabe8408133d744dd36efce5f3762916a5c1fe5cf
  2 files changed, 20 insertions(+)
 
 diff --git a/Tethering/src/com/android/networkstack/tethering/Tethering.java b/Tethering/src/com/android/networkstack/tethering/Tethering.java
-index e821d2b..441a19f 100644
+index 722e81c..e0cc18b 100644
 --- a/Tethering/src/com/android/networkstack/tethering/Tethering.java
 +++ b/Tethering/src/com/android/networkstack/tethering/Tethering.java
-@@ -708,6 +708,13 @@ public class Tethering {
+@@ -732,6 +732,13 @@ public class Tethering {
  
      void interfaceAdded(String iface) {
          if (VDBG) Log.d(TAG, "interfaceAdded " + iface);
@@ -28,10 +28,10 @@ index e821d2b..441a19f 100644
      }
  
 diff --git a/Tethering/tests/unit/src/com/android/networkstack/tethering/TetheringTest.java b/Tethering/tests/unit/src/com/android/networkstack/tethering/TetheringTest.java
-index 40a673d..12b2597 100644
+index ed82373..dfa0942 100644
 --- a/Tethering/tests/unit/src/com/android/networkstack/tethering/TetheringTest.java
 +++ b/Tethering/tests/unit/src/com/android/networkstack/tethering/TetheringTest.java
-@@ -1076,6 +1076,19 @@ public class TetheringTest {
+@@ -1085,6 +1085,19 @@ public class TetheringTest {
          mTetheringEventCallback.expectUpstreamChanged(upstreamState.network);
      }
  
@@ -52,4 +52,5 @@ index 40a673d..12b2597 100644
      public void failingLocalOnlyHotspotLegacyApBroadcastWithIfaceStatusChanged() throws Exception {
          failingLocalOnlyHotspotLegacyApBroadcast(true);
 -- 
-2.43.0
+2.55.0
+

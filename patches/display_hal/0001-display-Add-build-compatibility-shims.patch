@@ -1,20 +1,30 @@
-From ae44b2e037437d58ff82480da577443bf8eb11ad Mon Sep 17 00:00:00 2001
+From aa0e10ca74b3f028ec2b7f3b2929801b03fa4750 Mon Sep 17 00:00:00 2001
 From: logix727 <logix727@users.noreply.github.com>
 Date: Tue, 4 Aug 2026 08:34:13 -0400
 Subject: [PATCH] display: Add build compatibility shims
 
-Change-Id: Ibdf7a0b7dba44aac63332bba25dedaa2a14c9277
+Provide the msm_ion / qti-smmu-proxy UAPI headers that gralloc includes
+(<linux/msm_ion.h>, <linux/qti-smmu-proxy.h>). They are not supplied by the
+prebuilt kernel headers this device uses, and Soong puts the module directory
+on the include path, so gralloc/linux/ resolves them.
+
+[metroid/evo] Dropped the libvmmem half of the original patch: on
+lineage-23.2-caf-sm8750 libvmmem no longer lives in this repo (HEAD is
+Revert "vmmem: Make libvmmem_headers available"). Both libvmmem and
+libvmmem_headers now come from vendor/qcom/opensource/libvmmem, so re-adding
+them here would be a duplicate.
+
+Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01RTyThMzCkh5fd3Ct1JP62p
+Change-Id: I71601eb8affb394b9c8934da93523455fe6b910a
 ---
  gralloc/linux/msm_ion.h        | 96 ++++++++++++++++++++++++++++++++++
  gralloc/linux/msm_ion_ids.h    | 38 ++++++++++++++
  gralloc/linux/qti-smmu-proxy.h | 58 ++++++++++++++++++++
- libvmmem/Android.bp            |  1 +
- libvmmem/vmmem.cpp             | 15 ++++++
- 5 files changed, 208 insertions(+)
+ 3 files changed, 192 insertions(+)
  create mode 100644 gralloc/linux/msm_ion.h
  create mode 100644 gralloc/linux/msm_ion_ids.h
  create mode 100644 gralloc/linux/qti-smmu-proxy.h
- create mode 100644 libvmmem/vmmem.cpp
 
 diff --git a/gralloc/linux/msm_ion.h b/gralloc/linux/msm_ion.h
 new file mode 100644
@@ -226,36 +236,6 @@ index 0000000..bad4608
 +					      struct smmu_proxy_get_dma_buf_ctl)
 +
 +#endif /* __QTI_SMMU_PROXY_UAPI_H_ */
-diff --git a/libvmmem/Android.bp b/libvmmem/Android.bp
-index 2318863..6e8143b 100644
---- a/libvmmem/Android.bp
-+++ b/libvmmem/Android.bp
-@@ -7,4 +7,5 @@ cc_library_headers {
- cc_library_shared {
-     name: "libvmmem",
-     vendor: true,
-+    srcs: ["vmmem.cpp"],
- }
-diff --git a/libvmmem/vmmem.cpp b/libvmmem/vmmem.cpp
-new file mode 100644
-index 0000000..6d4acec
---- /dev/null
-+++ b/libvmmem/vmmem.cpp
-@@ -0,0 +1,15 @@
-+#include "vmmem.h"
-+#include <memory>
-+
-+class VmMemDummy : public VmMem {
-+public:
-+    ~VmMemDummy() override {}
-+    int FindVmByName(const std::string& /*vm_name*/) override { return 0; }
-+    int LendDmabuf(int /*fd*/, const VmPerm& /*vm_perms*/) override { return 0; }
-+};
-+
-+VmMem::~VmMem() {}
-+
-+std::unique_ptr<VmMem> VmMem::CreateVmMem() {
-+    return std::make_unique<VmMemDummy>();
-+}
 -- 
-2.43.0
+2.55.0
+

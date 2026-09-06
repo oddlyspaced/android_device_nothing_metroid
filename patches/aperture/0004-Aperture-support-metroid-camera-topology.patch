@@ -1,9 +1,19 @@
-From e3d66ba62335ee9ac95ea183d0b1ebf6e611734c Mon Sep 17 00:00:00 2001
+From 9027c802bd75b7c4a52b24c1212372e1714fd472 Mon Sep 17 00:00:00 2001
 From: logix727 <logix727@users.noreply.github.com>
 Date: Tue, 4 Aug 2026 08:10:20 -0400
-Subject: [PATCH] Aperture: support metroid camera topology
+Subject: [PATCH 4/4] Aperture: support metroid camera topology
 
-Change-Id: I40ee909fe43d6edcd99082878dc60983c0dc97d2
+[metroid/evo] Rebased onto lineage-23.2. Upstream replaced
+androidx.camera.camera2.internal.CameraIdUtil with CameraCompatibilityFilter,
+which was a context line in the import hunk; the existing import is kept (it is
+still used by onCreate) and the seven new imports are added around it. The other
+two files applied with offset only.
+
+Applied after 0002-0004, which had already landed cleanly in this repo.
+
+Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01RTyThMzCkh5fd3Ct1JP62p
+Change-Id: Ie277b593c47e68575757dec99a73f82c9f867a75
 ---
  .../lineageos/aperture/ApertureApplication.kt | 40 ++++++++++-
  .../aperture/repositories/CameraRepository.kt |  7 ++
@@ -11,7 +21,7 @@ Change-Id: I40ee909fe43d6edcd99082878dc60983c0dc97d2
  3 files changed, 104 insertions(+), 10 deletions(-)
 
 diff --git a/app/src/main/java/org/lineageos/aperture/ApertureApplication.kt b/app/src/main/java/org/lineageos/aperture/ApertureApplication.kt
-index bed49d6..2a98af4 100644
+index d64c48a..7e5ccb7 100644
 --- a/app/src/main/java/org/lineageos/aperture/ApertureApplication.kt
 +++ b/app/src/main/java/org/lineageos/aperture/ApertureApplication.kt
 @@ -7,7 +7,14 @@ package org.lineageos.aperture
@@ -20,7 +30,7 @@ index bed49d6..2a98af4 100644
  import android.app.Application
 +import android.os.Build
 +import androidx.camera.camera2.Camera2Config
- import androidx.camera.camera2.internal.CameraIdUtil
+ import androidx.camera.camera2.internal.CameraCompatibilityFilter
 +import androidx.camera.core.CameraXConfig
 +import androidx.camera.core.impl.MutableOptionsBundle
 +import androidx.camera.core.impl.UseCaseConfig
@@ -77,7 +87,7 @@ index bed49d6..2a98af4 100644
      override fun onCreate() {
          super.onCreate()
 diff --git a/app/src/main/java/org/lineageos/aperture/repositories/CameraRepository.kt b/app/src/main/java/org/lineageos/aperture/repositories/CameraRepository.kt
-index de8e6bd..9420625 100644
+index e47ac48..5443475 100644
 --- a/app/src/main/java/org/lineageos/aperture/repositories/CameraRepository.kt
 +++ b/app/src/main/java/org/lineageos/aperture/repositories/CameraRepository.kt
 @@ -7,6 +7,7 @@ package org.lineageos.aperture.repositories
@@ -109,7 +119,7 @@ index de8e6bd..9420625 100644
       * List of external cameras. These will change once the user connects or disconnects a camera.
       */
 diff --git a/app/src/main/java/org/lineageos/aperture/viewmodels/CameraViewModel.kt b/app/src/main/java/org/lineageos/aperture/viewmodels/CameraViewModel.kt
-index 323283f..7da112d 100644
+index 4b132f2..2f769e3 100644
 --- a/app/src/main/java/org/lineageos/aperture/viewmodels/CameraViewModel.kt
 +++ b/app/src/main/java/org/lineageos/aperture/viewmodels/CameraViewModel.kt
 @@ -78,6 +78,7 @@ import org.lineageos.aperture.models.DistortionCorrectionMode
@@ -120,7 +130,7 @@ index 323283f..7da112d 100644
  import org.lineageos.aperture.models.GridMode
  import org.lineageos.aperture.models.HardwareKey
  import org.lineageos.aperture.models.HotPixelMode
-@@ -1449,10 +1450,13 @@ class CameraViewModel(application: Application) : ApertureViewModel(application)
+@@ -1466,10 +1467,13 @@ class CameraViewModel(application: Application) : ApertureViewModel(application)
  
              preferencesRepository.videoQuality.value = videoQuality
  
@@ -138,7 +148,7 @@ index 323283f..7da112d 100644
              )
          }
  
-@@ -1473,8 +1477,13 @@ class CameraViewModel(application: Application) : ApertureViewModel(application)
+@@ -1490,8 +1494,13 @@ class CameraViewModel(application: Application) : ApertureViewModel(application)
  
              preferencesRepository.videoFrameRate.value = videoFrameRate
  
@@ -154,7 +164,7 @@ index 323283f..7da112d 100644
              )
          }
  
-@@ -1543,13 +1552,16 @@ class CameraViewModel(application: Application) : ApertureViewModel(application)
+@@ -1560,13 +1569,16 @@ class CameraViewModel(application: Application) : ApertureViewModel(application)
       * @param zoomRatio The zoom ratio to apply
       */
      fun smoothZoom(zoomRatio: Float) {
@@ -173,7 +183,7 @@ index 323283f..7da112d 100644
          ValueAnimator.ofFloat(
              zoomState.zoomRatio,
              zoomRatio.coerceIn(zoomState.minZoomRatio, zoomState.maxZoomRatio)
-@@ -1631,6 +1643,23 @@ class CameraViewModel(application: Application) : ApertureViewModel(application)
+@@ -1648,6 +1660,23 @@ class CameraViewModel(application: Application) : ApertureViewModel(application)
          cameraMode: CameraMode,
          cameraFacing: CameraFacing,
      ): Camera? {
@@ -197,7 +207,7 @@ index 323283f..7da112d 100644
          val compatibleCameras = cameraRepository.cameras.first()
              .filter { camera ->
                  camera.supportsCameraMode(cameraMode)
-@@ -1641,6 +1670,25 @@ class CameraViewModel(application: Application) : ApertureViewModel(application)
+@@ -1658,6 +1687,25 @@ class CameraViewModel(application: Application) : ApertureViewModel(application)
          } ?: compatibleCameras.firstOrNull()
      }
  
@@ -223,7 +233,7 @@ index 323283f..7da112d 100644
      @androidx.annotation.OptIn(ExperimentalZeroShutterLag::class)
      private fun createInitialCameraConfiguration(
          camera: Camera,
-@@ -1723,7 +1771,8 @@ class CameraViewModel(application: Application) : ApertureViewModel(application)
+@@ -1740,7 +1788,8 @@ class CameraViewModel(application: Application) : ApertureViewModel(application)
                  videoFrameRate = videoFrameRate,
                  videoDynamicRange = videoDynamicRange,
                  videoMirrorMode = preferencesRepository.videoMirrorMode.value,
@@ -234,4 +244,5 @@ index 323283f..7da112d 100644
          }
  
 -- 
-2.43.0
+2.55.0
+

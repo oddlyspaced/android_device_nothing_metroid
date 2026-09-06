@@ -1,19 +1,24 @@
-From 402087761da73e1151573fab75ef46b77fb262d8 Mon Sep 17 00:00:00 2001
+From 31a157352bc47c9894940926029a2f68747c7c8a Mon Sep 17 00:00:00 2001
 From: logix727 <mbstober@gmail.com>
 Date: Wed, 12 Aug 2026 19:57:38 -0400
 Subject: [PATCH 2/2] Tethering: prefer active NCM classification
 
-Change-Id: I340b6099d0deffc4e2b4369bb2af23492a365efd
+[metroid/evo] Rebased onto lineage-23.2. Upstream renamed the
+enableUsbIpServing parameter from forNcmFunction to isNcm, so the second hunk
+was adapted to the new name; logic is unchanged.
+
+Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01RTyThMzCkh5fd3Ct1JP62p
 ---
  .../android/networkstack/tethering/Tethering.java    |  6 ++++--
  .../networkstack/tethering/TetheringTest.java        | 12 ++++++++++++
  2 files changed, 16 insertions(+), 2 deletions(-)
 
 diff --git a/Tethering/src/com/android/networkstack/tethering/Tethering.java b/Tethering/src/com/android/networkstack/tethering/Tethering.java
-index 441a19f..0379c0b 100644
+index e0cc18b..a4fee88 100644
 --- a/Tethering/src/com/android/networkstack/tethering/Tethering.java
 +++ b/Tethering/src/com/android/networkstack/tethering/Tethering.java
-@@ -708,7 +708,7 @@ public class Tethering {
+@@ -732,7 +732,7 @@ public class Tethering {
  
      void interfaceAdded(String iface) {
          if (VDBG) Log.d(TAG, "interfaceAdded " + iface);
@@ -22,22 +27,22 @@ index 441a19f..0379c0b 100644
                  && !mTetherStates.containsKey(iface)) {
              final int type = getServedUsbType(true /* forNcmFunction */);
              final TetheringRequest request = mRequestTracker.getOrCreatePendingRequest(type);
-@@ -1856,7 +1856,9 @@ public class Tethering {
+@@ -1865,7 +1865,9 @@ public class Tethering {
          final TetheringRequest request = mRequestTracker.getOrCreatePendingRequest(tetheringType);
          if (ifaces != null) {
              for (String iface : ifaces) {
 -                if (ifaceNameToType(iface) == tetheringType) {
-+                final boolean matches = forNcmFunction
++                final boolean matches = isNcm
 +                        ? mConfig.isNcm(iface) : ifaceNameToType(iface) == tetheringType;
 +                if (matches) {
-                     enableIpServing(request, iface, forNcmFunction);
+                     enableIpServing(request, iface, isNcm);
                      return;
                  }
 diff --git a/Tethering/tests/unit/src/com/android/networkstack/tethering/TetheringTest.java b/Tethering/tests/unit/src/com/android/networkstack/tethering/TetheringTest.java
-index 12b2597..56aa78d 100644
+index dfa0942..5188718 100644
 --- a/Tethering/tests/unit/src/com/android/networkstack/tethering/TetheringTest.java
 +++ b/Tethering/tests/unit/src/com/android/networkstack/tethering/TetheringTest.java
-@@ -1089,6 +1089,18 @@ public class TetheringTest {
+@@ -1098,6 +1098,18 @@ public class TetheringTest {
          verify(mNetd).tetherInterfaceAdd(TEST_NCM_IFNAME);
      }
  
@@ -57,4 +62,5 @@ index 12b2597..56aa78d 100644
      public void failingLocalOnlyHotspotLegacyApBroadcastWithIfaceStatusChanged() throws Exception {
          failingLocalOnlyHotspotLegacyApBroadcast(true);
 -- 
-2.43.0
+2.55.0
+

@@ -1,7 +1,7 @@
-From db454eb0525be0b59bee2c32030df3fd7d553eb5 Mon Sep 17 00:00:00 2001
+From bd8078fe031af3ca658209e0549dd64b4810ebd7 Mon Sep 17 00:00:00 2001
 From: Metroid Maintainer <maintainer@localhost>
 Date: Thu, 6 Aug 2026 16:45:41 -0400
-Subject: [PATCH] Aperture: fix metroid video controls
+Subject: [PATCH 2/4] Aperture: fix metroid video controls
 
 Route camera flips through the existing metroid video selector so UHD and
 60-fps modes return to physical camera 0 rather than logical camera 4.
@@ -15,7 +15,7 @@ control whose value cannot affect capture requests.
  2 files changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/app/src/main/java/org/lineageos/aperture/SettingsActivity.kt b/app/src/main/java/org/lineageos/aperture/SettingsActivity.kt
-index 0040e85..530a42c 100644
+index 9198171..8229fcb 100644
 --- a/app/src/main/java/org/lineageos/aperture/SettingsActivity.kt
 +++ b/app/src/main/java/org/lineageos/aperture/SettingsActivity.kt
 @@ -6,6 +6,7 @@
@@ -45,10 +45,10 @@ index 0040e85..530a42c 100644
              // Photo capture mode
              photoCaptureMode.onPreferenceChangeListener = photoCaptureModePreferenceChangeListener
 diff --git a/app/src/main/java/org/lineageos/aperture/viewmodels/CameraViewModel.kt b/app/src/main/java/org/lineageos/aperture/viewmodels/CameraViewModel.kt
-index 1986ccc..06eda41 100644
+index 0c1ecf3..26abf45 100644
 --- a/app/src/main/java/org/lineageos/aperture/viewmodels/CameraViewModel.kt
 +++ b/app/src/main/java/org/lineageos/aperture/viewmodels/CameraViewModel.kt
-@@ -1259,7 +1259,11 @@ class CameraViewModel(application: Application) : ApertureViewModel(application)
+@@ -1258,7 +1258,11 @@ class CameraViewModel(application: Application) : ApertureViewModel(application)
              cameraFacingComparator
          ).next(cameraConfiguration.camera.cameraFacing) ?: error("No camera available")
  
@@ -62,4 +62,5 @@ index 1986ccc..06eda41 100644
              CameraFacing.FRONT -> cameraRepository.mainFrontCamera
              CameraFacing.BACK -> cameraRepository.mainBackCamera
 -- 
-2.43.0
+2.55.0
+

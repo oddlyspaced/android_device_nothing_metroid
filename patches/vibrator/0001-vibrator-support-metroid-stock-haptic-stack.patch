@@ -1,4 +1,4 @@
-From a1b22e719f0e1e7f2986860601a94b66f36ac2f5 Mon Sep 17 00:00:00 2001
+From 876a31e90aa9566f00f7821cde7aaf7f4edef258 Mon Sep 17 00:00:00 2001
 From: logix727 <logix727@users.noreply.github.com>
 Date: Tue, 4 Aug 2026 08:10:20 -0400
 Subject: [PATCH] vibrator: support metroid stock haptic stack
@@ -11,7 +11,7 @@ Change-Id: Icc1e2b19fdbc4dbf195e46af2ec666581e70308a
  3 files changed, 167 insertions(+), 14 deletions(-)
 
 diff --git a/aidl/Android.bp b/aidl/Android.bp
-index 61f636c..6054099 100644
+index e05ee96..745584e 100644
 --- a/aidl/Android.bp
 +++ b/aidl/Android.bp
 @@ -31,6 +31,10 @@ cc_library_shared {
@@ -235,4 +235,5 @@ index 86f0aa6..30d6221 100644
 +on property:persist.sys.sfdc=*
 +    setprop persist.vendor.sfdc ${persist.sys.sfdc}
 -- 
-2.43.0
+2.55.0
+

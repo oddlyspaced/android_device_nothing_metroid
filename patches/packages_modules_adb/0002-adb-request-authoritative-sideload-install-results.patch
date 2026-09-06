@@ -1,7 +1,7 @@
-From 5468a11bced5023cff45c4d988994a30b684b732 Mon Sep 17 00:00:00 2001
+From a43ffd7305352595388bddea29709b96c46e8b68 Mon Sep 17 00:00:00 2001
 From: Your Name <your.email@example.com>
 Date: Fri, 21 Aug 2026 09:20:14 -0400
-Subject: [PATCH] adb: request authoritative sideload install results
+Subject: [PATCH 2/2] adb: request authoritative sideload install results
 
 Change-Id: I2f8f6c599991dd122788a53afc68677d071441e3
 ---
@@ -9,10 +9,10 @@ Change-Id: I2f8f6c599991dd122788a53afc68677d071441e3
  1 file changed, 20 insertions(+), 2 deletions(-)
 
 diff --git a/client/commandline.cpp b/client/commandline.cpp
-index 83e477c..cc93915 100644
+index b9e1d53..d01edbd 100644
 --- a/client/commandline.cpp
 +++ b/client/commandline.cpp
-@@ -900,11 +900,24 @@ static int adb_sideload_install(const char* filename, bool rescue_mode) {
+@@ -901,11 +901,24 @@ static int adb_sideload_install(const char* filename, bool rescue_mode) {
          return -1;
      }
  
@@ -39,7 +39,7 @@ index 83e477c..cc93915 100644
      if (device_fd < 0) {
          fprintf(stderr, "adb: sideload connection failed: %s\n", error.c_str());
  
-@@ -942,8 +955,13 @@ static int adb_sideload_install(const char* filename, bool rescue_mode) {
+@@ -943,8 +956,13 @@ static int adb_sideload_install(const char* filename, bool rescue_mode) {
                     static_cast<double>(xfer) / (sb.st_size ? sb.st_size : 1),
                     static_cast<int>(strlen(filename) + 10), "");
              if (strcmp(kMinadbdServicesExitFailure, buf) == 0) {
@@ -54,5 +54,5 @@ index 83e477c..cc93915 100644
          }
  
 -- 
-2.43.0
+2.55.0
 

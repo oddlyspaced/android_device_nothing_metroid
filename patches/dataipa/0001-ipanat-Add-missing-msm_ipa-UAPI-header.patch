@@ -1,4 +1,4 @@
-From 3e65c47ab816903fddae9484bfd41631a12626a0 Mon Sep 17 00:00:00 2001
+From a775f6a07da284b9620b52a6cb281c5a0bc372d2 Mon Sep 17 00:00:00 2001
 From: logix727 <logix727@users.noreply.github.com>
 Date: Tue, 4 Aug 2026 08:34:13 -0400
 Subject: [PATCH] ipanat: Add missing msm_ipa UAPI header
@@ -4014,4 +4014,5 @@ index 0000000..94a5fa4
 +
 +#endif /* _UAPI_MSM_IPA_H_ */
 -- 
-2.43.0
+2.55.0
+

@@ -1,4 +1,4 @@
-From 80ea3496dc702347410c896901cebec554084f69 Mon Sep 17 00:00:00 2001
+From 46e35a20d24e8b3a287724274b160604ed805701 Mon Sep 17 00:00:00 2001
 From: Your Name <your.email@example.com>
 Date: Sat, 15 Aug 2026 18:52:20 -0400
 Subject: [PATCH] TelephonyProvider: refresh APNs when config changes
@@ -9,10 +9,10 @@ Change-Id: I101b5c390f7cd7d36763f589a84b8f0ddbe250a3
  1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/src/com/android/providers/telephony/TelephonyProvider.java b/src/com/android/providers/telephony/TelephonyProvider.java
-index 9bb8eb2..fb2536b 100644
+index f906617..979a908 100644
 --- a/src/com/android/providers/telephony/TelephonyProvider.java
 +++ b/src/com/android/providers/telephony/TelephonyProvider.java
-@@ -3477,12 +3477,12 @@ public class TelephonyProvider extends ContentProvider
+@@ -3497,12 +3497,12 @@ public class TelephonyProvider extends ContentProvider
              if (VDBG) log("onCreate: newBuildId is empty");
          }
  
@@ -31,5 +31,5 @@ index 9bb8eb2..fb2536b 100644
              if (DBG) addAllApnSharedPrefToLocalLog();
          }
 -- 
-2.43.0
+2.55.0
 

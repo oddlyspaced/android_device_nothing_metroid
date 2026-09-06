@@ -1,4 +1,4 @@
-From 2af0c525f98a5cedf2e15376f32b4cde107606e8 Mon Sep 17 00:00:00 2001
+From 270c81ae9a7e30e739b463222b0d65a465ffdb41 Mon Sep 17 00:00:00 2001
 From: logix727 <logix727@users.noreply.github.com>
 Date: Tue, 4 Aug 2026 08:34:13 -0400
 Subject: [PATCH] ipacm: Add required build include paths
@@ -44,4 +44,5 @@ index 3400790..3c215ca 100644
      cflags: ["-v"] + ["-DFEATURE_IPA_ANDROID"] + ["-DFEATURE_IPACM_RESTART"] + [
          "-DFEATURE_IPACM_AIDL",
 -- 
-2.43.0
+2.55.0
+

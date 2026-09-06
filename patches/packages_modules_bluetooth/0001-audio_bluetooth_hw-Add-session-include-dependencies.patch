@@ -1,4 +1,4 @@
-From bf83ccd8fc5ce4584355eac82f63ab2670b2c844 Mon Sep 17 00:00:00 2001
+From f3e0b247b85196b006267684b08b91c9cf0e9b9f Mon Sep 17 00:00:00 2001
 From: logix727 <logix727@users.noreply.github.com>
 Date: Tue, 4 Aug 2026 08:34:03 -0400
 Subject: [PATCH] audio_bluetooth_hw: Add session include dependencies
@@ -24,4 +24,5 @@ index 1b8e850..71587e8 100644
          "libaudioutils",
          "libbase",
 -- 
-2.43.0
+2.55.0
+

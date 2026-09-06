@@ -1,4 +1,4 @@
-From 90b37a638d747f2c5c45dc650be01b8f258ad17b Mon Sep 17 00:00:00 2001
+From e0b1e67f189afdd21bcafd6ab245536cf246efe5 Mon Sep 17 00:00:00 2001
 From: Metroid Maintainer <maintainer@localhost>
 Date: Sat, 22 Aug 2026 19:27:39 -0400
 Subject: [PATCH] apns: add metroid carrier profiles
@@ -466,5 +466,5 @@ index 1802652..43ee53a 100644
 +        protocol="IPV4V6" roaming_protocol="IPV4V6" user_visible="false" />
  </apns>
 -- 
-2.43.0
+2.55.0
 

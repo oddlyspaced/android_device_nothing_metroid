@@ -1,37 +1,40 @@
-From e1521e76f588b94bb754101bf47a97c8df078747 Mon Sep 17 00:00:00 2001
+From 4b11c6232c48a8080e941f94683e4edbfa3afa09 Mon Sep 17 00:00:00 2001
 From: logix727 <logix727@users.noreply.github.com>
 Date: Tue, 4 Aug 2026 08:10:20 -0400
-Subject: [PATCH] Settings: avoid UDFPS enrollment footer overlap
+Subject: [PATCH 3/3] Settings: avoid UDFPS enrollment footer overlap
 
-Change-Id: I188fa66dcc398a75f8b6070b1267b5af987003e5
+[metroid/evo] Rebased onto lineage-23.2. Upstream had already refactored this
+block to hoist the layout into a local (udfpsLayout) and call
+adjustFooterButtonForLowUdfps(), so only the post(adjustUdfpsViewWithFooterBar)
+call is added, reusing the existing local instead of re-introducing one.
+The other two files applied with offset only.
+
+Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01RTyThMzCkh5fd3Ct1JP62p
 ---
- .../biometrics/fingerprint/FingerprintEnrollEnrolling.java  | 6 ++++--
+ .../biometrics/fingerprint/FingerprintEnrollEnrolling.java  | 2 ++
  .../biometrics/fingerprint/UdfpsEnrollEnrollingView.java    | 6 +++---
  .../settings/biometrics/fingerprint/UdfpsEnrollView.java    | 6 +++++-
- 3 files changed, 12 insertions(+), 6 deletions(-)
+ 3 files changed, 10 insertions(+), 4 deletions(-)
 
 diff --git a/src/com/android/settings/biometrics/fingerprint/FingerprintEnrollEnrolling.java b/src/com/android/settings/biometrics/fingerprint/FingerprintEnrollEnrolling.java
-index 91f0986..f41f09c 100644
+index aed1722..8d8c9e5 100644
 --- a/src/com/android/settings/biometrics/fingerprint/FingerprintEnrollEnrolling.java
 +++ b/src/com/android/settings/biometrics/fingerprint/FingerprintEnrollEnrolling.java
-@@ -301,8 +301,10 @@ public class FingerprintEnrollEnrolling extends BiometricsEnrollEnrolling {
-         // If it's udfps, set the background color only for secondary button if necessary.
-         if (mCanAssumeUdfps) {
-             mShouldSetFooterBarBackground = false;
--            ((UdfpsEnrollEnrollingView) getLayout()).setSecondaryButtonBackground(
--                    getBackgroundColor());
-+            final UdfpsEnrollEnrollingView layout = (UdfpsEnrollEnrollingView) getLayout();
-+            layout.setSecondaryButtonBackground(getBackgroundColor());
+@@ -304,6 +304,8 @@ public class FingerprintEnrollEnrolling extends BiometricsEnrollEnrolling {
+             final UdfpsEnrollEnrollingView udfpsLayout = (UdfpsEnrollEnrollingView) getLayout();
+             udfpsLayout.setSecondaryButtonBackground(getBackgroundColor());
+             udfpsLayout.adjustFooterButtonForLowUdfps();
 +            // Keep the enrollment ring above the footer, as Nothing's stock enrollment UI does.
-+            layout.post(layout::adjustUdfpsViewWithFooterBar);
-         }
- 
-         final LayerDrawable fingerprintDrawable = mProgressBar != null
++            udfpsLayout.post(udfpsLayout::adjustUdfpsViewWithFooterBar);
+             if (mFooterBarMixin != null && mFooterBarMixin.getButtonContainer() != null) {
+                 mFooterBarMixin.getButtonContainer().setBackgroundColor(Color.TRANSPARENT);
+             }
 diff --git a/src/com/android/settings/biometrics/fingerprint/UdfpsEnrollEnrollingView.java b/src/com/android/settings/biometrics/fingerprint/UdfpsEnrollEnrollingView.java
-index 931974e..1610ae2 100644
+index d9f6ba5..1b69276 100644
 --- a/src/com/android/settings/biometrics/fingerprint/UdfpsEnrollEnrollingView.java
 +++ b/src/com/android/settings/biometrics/fingerprint/UdfpsEnrollEnrollingView.java
-@@ -162,7 +162,7 @@ public class UdfpsEnrollEnrollingView extends GlifLayout {
+@@ -164,7 +164,7 @@ public class UdfpsEnrollEnrollingView extends GlifLayout {
          return metrics.scaledDensity;
      }
  
@@ -40,7 +43,7 @@ index 931974e..1610ae2 100644
          final FrameLayout allContent = findViewById(R.id.suc_layout_status);
          final ImageView udfpsProgressView = findViewById(
                  R.id.udfps_enroll_animation_fp_progress_view);
-@@ -177,8 +177,8 @@ public class UdfpsEnrollEnrollingView extends GlifLayout {
+@@ -179,8 +179,8 @@ public class UdfpsEnrollEnrollingView extends GlifLayout {
                  - (footerBarHeight + navigationBarHeight);
  
          if (udfpsProgressDrawableBottom > footerBarTop) {
@@ -72,4 +75,5 @@ index 0c80b48..f868695 100644
          updateDimensions();
  
 -- 
-2.43.0
+2.55.0
+

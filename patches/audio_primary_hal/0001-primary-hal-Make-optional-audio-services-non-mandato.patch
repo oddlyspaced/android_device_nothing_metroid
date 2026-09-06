@@ -1,4 +1,4 @@
-From 863eb159ab7d8bc64da6c2e20c1b34b31e6be65e Mon Sep 17 00:00:00 2001
+From bacd40a8f9eee8ec9cf647c29be22075c2994353 Mon Sep 17 00:00:00 2001
 From: logix727 <logix727@users.noreply.github.com>
 Date: Tue, 4 Aug 2026 08:34:12 -0400
 Subject: [PATCH] primary-hal: Make optional audio services non-mandatory
@@ -25,4 +25,5 @@ index cdbb603..46c8954 100644
              method="registerIModuleBluetoothSWQti" mandatory="false" />
      <library name = "asr" libraryName="libqasr.so"
 -- 
-2.43.0
+2.55.0
+
