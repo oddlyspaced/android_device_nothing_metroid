@@ -32,6 +32,23 @@
 # The camera project_name flag is not optional: without it camera.ko fails to compile with
 # "redefinition of 'qcom_scm_camera_qos'", because CONFIG_SPECTRA_SECURE_CAMNOC_REG_UPDATE is
 # only set for the sun project and cam_compat.h redefines a struct the kernel already provides.
+#
+# Two further steps this script needs, which `bazel build` above does NOT perform:
+#
+#   1. Populate kernelws/dist. `build` produces the artifacts but never copies them out:
+#        build/kernel/kleaf/bazel.sh run --noenable_bzlmod \
+#            --//vendor/qcom/opensource/camera-kernel:project_name=sun \
+#            //msm-kernel:sun_perf_dist -- --dist_dir=$PWD/dist
+#
+#   2. Build the two host tools build_tuna_dtb.sh needs and put them in dist/bin. The dist
+#      target copies modules and images only, not host tools:
+#        build/kernel/kleaf/bazel.sh build --noenable_bzlmod @dtc//:dtc @dtc//:fdtoverlaymerge
+#        mkdir -p dist/bin && cp bazel-out/k8-fastbuild/bin/external/dtc/{dtc,fdtoverlaymerge} dist/bin/
+#      (This is what setup-kleaf-workspace.sh's bison/version_gen.h step prepares external/dtc
+#      for. DTC= and FDTOVERLAYMERGE= can override the paths instead.)
+#
+# Sanity check on the result: build_tuna_dtb.sh must report tuna-qrd-overlay at 310513 B. A
+# smaller value (e.g. 288912 B) means overlay sources were silently dropped -- see its comments.
 
 set -euo pipefail
 
@@ -122,8 +139,8 @@ SYSTEM_DLKM_LIST="$OUT/system_dlkm_names.txt"
 UNPUBLISHED="stm_nfc_i2c stm_st54se_gpio"
 LOCAL_PREBUILTS="$HERE/local-prebuilt-modules"
 declare -A LOCAL_PREBUILT_SHA256=(
-    [stm_nfc_i2c.ko]=5f6ec24ab7a464169463f10d56e42d09e5f4cc360b5e7ec8261a515ad895f742
-    [stm_st54se_gpio.ko]=334c9afd91859276bbdefae30f671a0b515d6656ccbded6121da4e7f587c741a
+    [stm_nfc_i2c.ko]=a7a8921eac43c8ca08bd4f486d1f00821a4ced4a0181dd4df5127198e6efffa3
+    [stm_st54se_gpio.ko]=29433ecdc0f71acad76b71433c14a1b791f1b74e382b6ce6adc61132c0cda85b
 )
 
 [[ -x "$STRIP" ]] || { echo "!! llvm-strip not found at $STRIP" >&2; exit 1; }

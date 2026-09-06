@@ -5,11 +5,20 @@ matching published source:
 
 | Module | Purpose | Expected SHA-256 |
 |---|---|---|
-| `stm_nfc_i2c.ko` | ST NFC controller | `5f6ec24ab7a464169463f10d56e42d09e5f4cc360b5e7ec8261a515ad895f742` |
-| `stm_st54se_gpio.ko` | ST54 secure-element GPIO | `334c9afd91859276bbdefae30f671a0b515d6656ccbded6121da4e7f587c741a` |
+| `stm_nfc_i2c.ko` | ST NFC controller | `a7a8921eac43c8ca08bd4f486d1f00821a4ced4a0181dd4df5127198e6efffa3` |
+| `stm_st54se_gpio.ko` | ST54 secure-element GPIO | `29433ecdc0f71acad76b71433c14a1b791f1b74e382b6ce6adc61132c0cda85b` |
 
-Both expected files came from the `vendor_dlkm` partition of Nothing OS
-`Metroid_B4.0-250917-1218` and report the stock 6.6.87 Android 15 KMI. This public
+Both expected files come from the `vendor_dlkm` partition of Nothing OS
+`Metroid_B4.1-260814-1733` and report `6.6.127-android15-8`.
+
+Nothing rebuilt both modules between `B4.0-250917-1218` (6.6.87) and this
+release, so the hashes differ from the ones this file previously recorded. The
+whole vendor blob set is extracted from `B4.1-260814-1733` -- the build
+`BASELINE.md` requires for the modem -- so these are pinned to the same image
+rather than mixing an older NFC module into a newer vendor set. The point-release
+gap against the shipped 6.6.102 GKI `Image` is fine for the reason given in
+`kernel/gki/README.md`: GKI enforces the KMI generation (`android15-8`), which
+all three share, not the point release. This public
 repository does not redistribute those binaries. Extract them from your own
 copy of that documented stock image:
 

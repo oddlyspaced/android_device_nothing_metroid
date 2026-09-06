@@ -11,8 +11,8 @@ TMP="$(mktemp -d "$HERE/.local-prebuilt-modules.XXXXXX")"
 trap 'rm -rf "$TMP"' EXIT
 
 declare -A EXPECTED=(
-    [stm_nfc_i2c.ko]=5f6ec24ab7a464169463f10d56e42d09e5f4cc360b5e7ec8261a515ad895f742
-    [stm_st54se_gpio.ko]=334c9afd91859276bbdefae30f671a0b515d6656ccbded6121da4e7f587c741a
+    [stm_nfc_i2c.ko]=a7a8921eac43c8ca08bd4f486d1f00821a4ced4a0181dd4df5127198e6efffa3
+    [stm_st54se_gpio.ko]=29433ecdc0f71acad76b71433c14a1b791f1b74e382b6ce6adc61132c0cda85b
 )
 
 for module in "${!EXPECTED[@]}"; do
