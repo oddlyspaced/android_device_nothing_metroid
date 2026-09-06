@@ -27,6 +27,19 @@ vendor/bin/hw/vendor.qti.hardware.vibrator.service;MODULE_SUFFIX=.stock
 vendor/etc/init/vendor.qti.hardware.vibrator.service.rc
 vendor/etc/vintf/manifest/vendor.qti.hardware.vibrator.service.xml
 
+# Force-copied stock blobs (installed by proprietary_force_copy.mk, not as modules).
+# EXTRACT_ONLY: these collide by name with AOSP/source modules
+# (android.hardware.wifi-service, drm-service.clearkey, sensors-service.multihal),
+# so they are installed via PRODUCT_COPY_FILES instead of generated packages.
+# Without these entries the files are absent and the force-copy rules fail.
+vendor/bin/audioadsprpcd;EXTRACT_ONLY
+vendor/bin/ipacm;EXTRACT_ONLY
+vendor/bin/hw/android.hardware.drm-service.clearkey;EXTRACT_ONLY
+vendor/bin/hw/android.hardware.sensors-service.multihal;EXTRACT_ONLY
+vendor/bin/hw/android.hardware.wifi-service;EXTRACT_ONLY
+vendor/bin/hw/vendor.qti.hardware.memtrack-service;EXTRACT_ONLY
+vendor/etc/wifi/wcn7750/WCNSS_qcom_cfg.ini;EXTRACT_ONLY
+
 # QCC
 system_ext/app/QCC/QCC.apk:system_ext/priv-app/QCC/QCC.apk;PRESIGNED
 system_ext/bin/qccsyshal_aidl-service

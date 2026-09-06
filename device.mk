@@ -328,8 +328,11 @@ PRODUCT_PRECOMPILED_SEPOLICY := false
 #     Leveler
 
 # Glyph sysconfig XML (privapp-permissions xml already copied by metroid-vendor.mk).
-PRODUCT_COPY_FILES += \
-    vendor/nothing/metroid/glyph/etc/sysconfig/com.nothing.glyphnotification.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/sysconfig/com.nothing.glyphnotification.xml
+# Disabled with the Glyph packages above: vendor/nothing/metroid/glyph/ is a hand-maintained
+# directory that extract-files.py does not produce, so this copy fails on a clean vendor tree.
+# Re-enable together with the PRODUCT_PACKAGES block above.
+# PRODUCT_COPY_FILES += \
+#     vendor/nothing/metroid/glyph/etc/sysconfig/com.nothing.glyphnotification.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/sysconfig/com.nothing.glyphnotification.xml
 
 # OPUS bring-up: EARLY (system build.prop, before zygote) props — /vendor/build.prop loads too late here.
 # ro.hw_timeout_multiplier=4 -> framework Watchdog 60s*4=240s to survive the slow imageless first boot

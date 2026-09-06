@@ -171,7 +171,6 @@ PRODUCT_COPY_FILES += \
     vendor/nothing/metroid/proprietary/vendor/lib64/vendor.qti.hardware.systemhelper@1.0.so:$(TARGET_COPY_OUT_VENDOR)/lib64/vendor.qti.hardware.systemhelper@1.0.so \
     vendor/nothing/metroid/proprietary/vendor/lib64/vendor.qti.hardware.systemhelperaidl-V1-ndk.so:$(TARGET_COPY_OUT_VENDOR)/lib64/vendor.qti.hardware.systemhelperaidl-V1-ndk.so \
     vendor/nothing/metroid/proprietary/vendor/lib64/vendor.qti.hardware.wifi.supplicant-V1-ndk.so:$(TARGET_COPY_OUT_VENDOR)/lib64/vendor.qti.hardware.wifi.supplicant-V1-ndk.so \
-    vendor/nothing/metroid/proprietary/vendor/product/media/audio/notifications/01_oi.ogg:$(TARGET_COPY_OUT_VENDOR)/product/media/audio/notifications/01_oi.ogg \
 
 
 # === METROID audio-only tranche (2026-07-09) — sound path; no VINTF decl, low boot risk ===
@@ -189,7 +188,7 @@ PRODUCT_COPY_FILES += \
     vendor/nothing/metroid/proprietary/vendor/bin/hw/android.hardware.wifi-service:$(TARGET_COPY_OUT_VENDOR)/bin/hw/android.hardware.wifi-service \
     vendor/nothing/metroid/proprietary/vendor/etc/init/android.hardware.wifi-service.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/android.hardware.wifi-service.rc \
     vendor/nothing/metroid/proprietary/vendor/etc/wifi/wcn7750/WCNSS_qcom_cfg.ini:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wcn7750/WCNSS_qcom_cfg.ini \
-    vendor/nothing/metroid/proprietary/vendor/firmware/wlan/qca_cld/wcn7750/WCNSS_qcom_cfg.ini:$(TARGET_COPY_OUT_VENDOR)/firmware/wlan/qca_cld/wcn7750/WCNSS_qcom_cfg.ini \
+    vendor/nothing/metroid/proprietary/vendor/etc/wifi/wcn7750/WCNSS_qcom_cfg.ini:$(TARGET_COPY_OUT_VENDOR)/firmware/wlan/qca_cld/wcn7750/WCNSS_qcom_cfg.ini \
     vendor/nothing/metroid/proprietary/vendor/lib64/android.hardware.wifi.common-V1-ndk.so:$(TARGET_COPY_OUT_VENDOR)/lib64/android.hardware.wifi.common-V1-ndk.so \
     vendor/nothing/metroid/proprietary/vendor/lib64/android.hardware.radio-V3-ndk.so:$(TARGET_COPY_OUT_VENDOR)/lib64/android.hardware.radio-V3-ndk.so \
     vendor/nothing/metroid/proprietary/vendor/lib64/android.frameworks.cameraservice.common-V1-ndk.so:$(TARGET_COPY_OUT_VENDOR)/lib64/android.frameworks.cameraservice.common-V1-ndk.so \
@@ -255,7 +254,6 @@ PRODUCT_COPY_FILES += \
     vendor/nothing/metroid/proprietary/vendor/bin/qttestservice:$(TARGET_COPY_OUT_VENDOR)/bin/qttestservice \
     vendor/nothing/metroid/proprietary/vendor/bin/spu_install_keybox:$(TARGET_COPY_OUT_VENDOR)/bin/spu_install_keybox \
     vendor/nothing/metroid/proprietary/vendor/bin/wifidisplayhalservice:$(TARGET_COPY_OUT_VENDOR)/bin/wifidisplayhalservice \
-    vendor/nothing/metroid/proprietary/vendor/etc/camera/metroid_smoothzoom_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/camera/metroid_smoothzoom_config.json \
     vendor/nothing/metroid/proprietary/vendor/lib64/android.hardware.graphics.common-V5-ndk.so:$(TARGET_COPY_OUT_VENDOR)/lib64/android.hardware.graphics.common-V5-ndk.so \
     vendor/nothing/metroid/proprietary/vendor/lib64/android.hardware.memtrack-V1-ndk.so:$(TARGET_COPY_OUT_VENDOR)/lib64/android.hardware.memtrack-V1-ndk.so \
     vendor/nothing/metroid/proprietary/vendor/lib64/android.hardware.tetheroffload-V1-ndk.so:$(TARGET_COPY_OUT_VENDOR)/lib64/android.hardware.tetheroffload-V1-ndk.so \
