@@ -1,7 +1,7 @@
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/lineage_metroid.mk
+    $(LOCAL_DIR)/evolution_metroid.mk
 
 COMMON_LUNCH_CHOICES := \
-    lineage_metroid-bp2a-user \
-    lineage_metroid-bp2a-userdebug \
-    lineage_metroid-bp2a-eng
+    evolution_metroid-bp2a-user \
+    evolution_metroid-bp2a-userdebug \
+    evolution_metroid-bp2a-eng
