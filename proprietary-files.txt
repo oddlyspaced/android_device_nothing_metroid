@@ -1127,7 +1127,6 @@ vendor/etc/acdbdata/nn_vad_models/fai__3.0.0_0.0__eai_4.2_enpuv5.pmd
 vendor/etc/acdbdata/nn_vad_models/fai__3.0.0_0.0__eai_4.6_enpuv5.pmd
 vendor/etc/acdbdata/tuna_qrd/QRD_tuna_acdb_cal.acdb
 vendor/etc/acdbdata/tuna_qrd/QRD_tuna_workspaceFileXml.qwsp
-vendor/etc/aconfig_flags.pb
 vendor/etc/advance_thermal_mitigation/atmc.json
 vendor/etc/advance_thermal_mitigation/atmc_ind.json
 vendor/etc/advance_thermal_mitigation/atmc_ind_win.json
