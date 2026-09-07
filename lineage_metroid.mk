@@ -17,6 +17,13 @@ $(call inherit-product, device/nothing/metroid/device.mk)
 # Keep only Nothing's stock AW86938/RichTap implementation.
 PRODUCT_PACKAGES := $(filter-out vendor.qti.hardware.vibrator.service,$(PRODUCT_PACKAGES))
 
+# Same for thermal: device/qcom/sepolicy pulls the source HAL, and the stock blob
+# (android.hardware.thermal-service.qti.stock) installs under the same stem, so both
+# would generate .../symbols/vendor/bin/hw/android.hardware.thermal-service.qti and
+# ninja fails with dupbuild=err. Keep only the stock one -- it carries Nothing's
+# shell_max mapping and thresholds.
+PRODUCT_PACKAGES := $(filter-out android.hardware.thermal-service.qti,$(PRODUCT_PACKAGES))
+
 # Sign with our own release keys, not AOSP's public testkey (anyone can forge updates for that).
 $(call inherit-product-if-exists, vendor/lineage-priv/keys/keys.mk)
 
