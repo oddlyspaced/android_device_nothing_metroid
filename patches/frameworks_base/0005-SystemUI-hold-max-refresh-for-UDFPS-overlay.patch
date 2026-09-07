@@ -1,4 +1,4 @@
-From a5b009fb2e257e75a8a9803149e6a97be8de479f Mon Sep 17 00:00:00 2001
+From d33b03f7d194686a0e7ba33b9513197f308244ca Mon Sep 17 00:00:00 2001
 From: logix727 <logix727@users.noreply.github.com>
 Date: Fri, 14 Aug 2026 18:44:00 -0400
 Subject: [PATCH 5/5] SystemUI: hold max refresh for UDFPS overlay
@@ -16,11 +16,10 @@ Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01RTyThMzCkh5fd3Ct1JP62p
 ---
  .../SystemUI/res/values/lineage_config.xml    |  3 ++
- .../systemui/biometrics/AuthController.java   |  1 +
- .../systemui/biometrics/UdfpsController.java  |  6 +++
+ .../systemui/biometrics/UdfpsController.java  |  2 +-
  .../biometrics/UdfpsControllerOverlay.kt      | 41 +++++++++++++++++++
  .../biometrics/UdfpsControllerOverlayTest.kt  | 40 ++++++++++++++++++
- 5 files changed, 91 insertions(+)
+ 4 files changed, 85 insertions(+), 1 deletion(-)
 
 diff --git a/packages/SystemUI/res/values/lineage_config.xml b/packages/SystemUI/res/values/lineage_config.xml
 index 5844a3dd1..611455e50 100644
@@ -36,35 +35,19 @@ index 5844a3dd1..611455e50 100644
      <!-- Brightness-to-alpha lookup table (LUT) for UDFPS framework dimming.
           Each entry is in the format <brightness>,<alpha> where:
             - brightness = panel backlight level
-diff --git a/packages/SystemUI/src/com/android/systemui/biometrics/AuthController.java b/packages/SystemUI/src/com/android/systemui/biometrics/AuthController.java
-index 201c80537..04c578ca5 100644
---- a/packages/SystemUI/src/com/android/systemui/biometrics/AuthController.java
-+++ b/packages/SystemUI/src/com/android/systemui/biometrics/AuthController.java
-@@ -306,6 +306,7 @@ public class AuthController implements
-         mUdfpsProps = !udfpsProps.isEmpty() ? udfpsProps : null;
-         if (mUdfpsProps != null) {
-             mUdfpsController = mUdfpsControllerFactory.get();
-+            mUdfpsController.setAuthController(this);
-             mUdfpsController.addCallback(new UdfpsController.Callback() {
-                 @Override
-                 public void onFingerUp() {
 diff --git a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsController.java b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsController.java
-index 28aff39e4..c15f37ce7 100644
+index 28aff39e4..67e043908 100644
 --- a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsController.java
 +++ b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsController.java
-@@ -213,6 +213,11 @@ public class UdfpsController implements DozeReceiver, Dumpable {
+@@ -213,7 +213,6 @@ public class UdfpsController implements DozeReceiver, Dumpable {
      // TODO(b/229290039): UDFPS controller should manage its dimensions on its own. Remove this.
      @Nullable private Runnable mAuthControllerUpdateUdfpsLocation;
      @Nullable private UdfpsDisplayModeProvider mUdfpsDisplayMode;
-+    @Nullable private AuthController mAuthController;
-+
-+    public void setAuthController(@NonNull AuthController authController) {
-+        mAuthController = authController;
-+    }
- 
+-
      // The ID of the pointer for which ACTION_DOWN has occurred. -1 means no pointer is active.
      private int mActivePointerId = MotionEvent.INVALID_POINTER_ID;
-@@ -383,6 +388,7 @@ public class UdfpsController implements DozeReceiver, Dumpable {
+     // Whether a pointer has been pilfered for current gesture
+@@ -383,6 +382,7 @@ public class UdfpsController implements DozeReceiver, Dumpable {
                          mKeyguardUpdateMonitor,
                          mKeyguardStateController,
                          mUdfpsDisplayMode,

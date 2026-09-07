@@ -1,0 +1,45 @@
+From 8cc3dae7b200febaa045b979c2334d1e241d600b Mon Sep 17 00:00:00 2001
+From: oddlyspaced <oddlyspaced1@gmail.com>
+Date: Tue, 8 Sep 2026 00:22:08 +0530
+Subject: [PATCH 2/2] gralloc: silence -Wformat on the 32-bit variant
+
+libgrallocutils has 25 ALOG call sites in gr_utils.cpp and gr_snap_helper.cpp
+that print uint64_t/int64_t with %lu/%ld. That is correct on arm64, where
+uint64_t is unsigned long, but wrong on arm32, where it is unsigned long long.
+The 64-bit variant builds clean; only android_vendor_arm_armv8-a_shared fails,
+with -Werror,-Wformat.
+
+metroid is core_64_bit_only and never loads 32-bit native code, so the failing
+variant cannot ship. Scope -Wno-format to arch arm rather than rewriting 25
+format strings or weakening the 64-bit build that actually runs.
+
+Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01RTyThMzCkh5fd3Ct1JP62p
+Change-Id: Id472d7418fcd415db5d02e6a67739ef2482b4e9a
+---
+ gralloc/Android.bp | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/gralloc/Android.bp b/gralloc/Android.bp
+index c68a7ca..21d27a4 100644
+--- a/gralloc/Android.bp
++++ b/gralloc/Android.bp
+@@ -7,6 +7,15 @@ cc_library_shared {
+         "qtidisplay_libubwcp_header_defaults"
+     ],
+     vendor: true,
++    // 25 ALOG format strings here use %lu/%ld for uint64_t/int64_t. That is correct on
++    // arm64 (unsigned long) but not on arm32 (unsigned long long), so -Wformat fails the
++    // 32-bit variant only. metroid is core_64_bit_only and never runs 32-bit native code;
++    // confine the suppression to the variant that cannot ship.
++    arch: {
++        arm: {
++            cflags: ["-Wno-format"],
++        },
++    },
+     sanitize: {
+         integer_overflow: true,
+     },
+-- 
+2.55.0
+

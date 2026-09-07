@@ -1,7 +1,7 @@
 From aa0e10ca74b3f028ec2b7f3b2929801b03fa4750 Mon Sep 17 00:00:00 2001
 From: logix727 <logix727@users.noreply.github.com>
 Date: Tue, 4 Aug 2026 08:34:13 -0400
-Subject: [PATCH] display: Add build compatibility shims
+Subject: [PATCH 1/2] display: Add build compatibility shims
 
 Provide the msm_ion / qti-smmu-proxy UAPI headers that gralloc includes
 (<linux/msm_ion.h>, <linux/qti-smmu-proxy.h>). They are not supplied by the

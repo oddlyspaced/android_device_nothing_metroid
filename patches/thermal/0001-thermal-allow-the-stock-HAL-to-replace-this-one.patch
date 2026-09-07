@@ -1,0 +1,43 @@
+From fc758f03707d1b4a939b5835150d59b36850c1bc Mon Sep 17 00:00:00 2001
+From: oddlyspaced <oddlyspaced1@gmail.com>
+Date: Mon, 7 Sep 2026 22:32:27 +0530
+Subject: [PATCH] thermal: allow the stock HAL to replace this one
+
+metroid ships Nothing's stock thermal HAL as a prebuilt because it carries
+their shell_max mapping and thresholds. It installs under the same stem, so
+both would generate the same install rule and ninja fails with dupbuild=err.
+
+Guard this module behind soong_config metroid.stock_thermal, mirroring what
+vendor/qcom/opensource/vibrator already does for the QTI vibrator service.
+Filtering PRODUCT_PACKAGES does not work -- the module is pulled in
+independently of that list.
+
+Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Change-Id: I63ed94713c97f307bf2d7db37f0eaa1162659c24
+---
+ Android.bp | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/Android.bp b/Android.bp
+index 8746923..a397370 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -3,6 +3,15 @@ soong_namespace {
+ 
+ cc_binary {
+ 	name: "android.hardware.thermal-service.qti",
++	// metroid ships the stock Nothing thermal HAL as a prebuilt
++	// (android.hardware.thermal-service.qti.stock) because it carries Nothing's
++	// shell_max mapping and thresholds. It installs under the same stem, so both
++	// would generate the same install rule and ninja fails with dupbuild=err.
++	// Mirrors the soong_config guard already used for the QTI vibrator service.
++	enabled: select(soong_config_variable("metroid", "stock_thermal"), {
++		true: false,
++		default: true,
++	}),
+ 	relative_install_path: "hw",
+ 	init_rc: ["android.hardware.thermal-service.qti.rc"],
+ 	vintf_fragments: ["android.hardware.thermal-service.qti.xml"],
+-- 
+2.55.0
+

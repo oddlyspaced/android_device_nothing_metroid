@@ -1,18 +1,62 @@
-From a910cda72b65e0c5083348ac3f824913a7bf9ffe Mon Sep 17 00:00:00 2001
+From 22b7c0a7fc26d82dc97452661ff5c7fa466d301d Mon Sep 17 00:00:00 2001
 From: logix727 <logix727@users.noreply.github.com>
 Date: Tue, 4 Aug 2026 08:37:28 -0400
 Subject: [PATCH] kernel headers: support metroid prebuilt exports
 
 Change-Id: I79839510eb5c6feb672a5cea04377e0458b28318
 ---
- build/soong/Android.bp | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ build/soong/Android.bp | 50 ++++++++++++------------------------------
+ 1 file changed, 14 insertions(+), 36 deletions(-)
 
 diff --git a/build/soong/Android.bp b/build/soong/Android.bp
-index a434526..fce10aa 100644
+index a434526..7c7290f 100644
 --- a/build/soong/Android.bp
 +++ b/build/soong/Android.bp
-@@ -57,7 +57,7 @@ lineage_generator {
+@@ -18,46 +18,18 @@ bootstrap_go_package {
+     pluginFor: ["soong_build"],
+ }
+ 
+-lineage_generator {
+-    name: "generated_kernel_includes",
++// metroid: generated_kernel_includes removed. This device uses a prebuilt kernel, so
++// prebuilt_kernel_includes serves the UAPI/techpack headers (see
++// generated_kernel_header_defaults below). The source-build module was left unused but
++// Soong still evaluates it, and its cmd references $(TARGET_KERNEL_PLATFORM_TARGET),
++// which lineage_generator cannot resolve -- it only knows $(location) and $(genDir).
+ 
+-    // The headers make command
+-    cmd: "set -e; " +
+-         "if [ -n \"$(TARGET_KERNEL_PLATFORM_TARGET)\" ]; then " +
+-         "    pushd $(KERNEL_PATH); " +
+-         "    ./tools/bazel --output_user_root=$(KERNEL_BUILD_OUT_PREFIX)$(genDir)/bazel-out --output_root=$(KERNEL_BUILD_OUT_PREFIX)$(genDir)/bazel-out run --experimental_convenience_symlinks=ignore --cpu=$(KERNEL_ARCH) //$(TARGET_KERNEL_SOURCE):$(TARGET_KERNEL_PLATFORM_TARGET)_uapi_headers_dist -- --destdir=$(KERNEL_BUILD_OUT_PREFIX)$(genDir); " +
+-         "    popd; " +
+-         "    gzip -d $(KERNEL_BUILD_OUT_PREFIX)$(genDir)/kernel-uapi-headers.tar.gz; " +
+-         "    tar -xf $(KERNEL_BUILD_OUT_PREFIX)$(genDir)/kernel-uapi-headers.tar -C $(KERNEL_BUILD_OUT_PREFIX)$(genDir); " +
+-         "else " +
+-         "    $(PATH_OVERRIDE_SOONG) $(KERNEL_MAKE_CMD) $(KERNEL_MAKE_FLAGS) -C $(TARGET_KERNEL_SOURCE) O=$(KERNEL_BUILD_OUT_PREFIX)$(genDir) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) headers_install; " +
+-         "fi; " +
+-         "vendor/lineage/tools/clean_headers.sh $(KERNEL_BUILD_OUT_PREFIX)$(genDir)",
+-
+-    // Directories that can be imported by a cc_* module generated_headers property
+-    export_include_dirs: [
+-        "usr/audio/include/uapi",
+-        "usr/include",
+-        "usr/include/audio",
+-        "usr/include/audio/include/uapi",
+-        "usr/techpack/audio/include",
+-    ],
+-
+-    // Sources for dependency tracking
+-    dep_root: "$(TARGET_KERNEL_SOURCE)",
+-    dep_files: [
+-        "Makefile",
+-        "include/**/*",
+-        "arch/$(KERNEL_ARCH)/include/**/*",
+-        "techpack/audio/include/**/*",
+-    ],
+-}
+ 
+ lineage_generator {
      name: "prebuilt_kernel_includes",
  
      // The headers extract command
@@ -21,7 +65,7 @@ index a434526..fce10aa 100644
  
      // Directories that can be imported by a cc_* module generated_headers property
      export_include_dirs: [
-@@ -66,6 +66,11 @@ lineage_generator {
+@@ -66,6 +38,11 @@ lineage_generator {
          "usr/include/audio",
          "usr/include/audio/include/uapi",
          "usr/techpack/audio/include",
@@ -33,7 +77,7 @@ index a434526..fce10aa 100644
      ],
  }
  
-@@ -87,8 +92,9 @@ bootstrap_go_package {
+@@ -87,8 +64,9 @@ bootstrap_go_package {
  
  cc_defaults {
      name: "generated_kernel_header_defaults",
