@@ -304,6 +304,11 @@ blob_fixups: blob_fixups_user_type = {
             '    group system readproc\n\n',
             '',
         ),
+    # Nothing ships this with <?xml version="2.0"?>. There is no XML 2.0, so the
+    # xmllint the build runs over every copied XML rejects it and the copy fails.
+    # It is the only malformed XML of the 320 staged blobs.
+    'system_ext/etc/permissions/vendor.qti.hardware.c2pa-V1-java.xml': blob_fixup()
+        .regex_replace('<\\?xml version="2\\.0"', '<?xml version="1.0"'),
     'vendor/etc/init/hw/init.qcom.usb.rc': blob_fixup()
         .regex_replace('ncm\\.0', 'ncm.gs6'),
     'vendor/etc/init/hw/init.qcom.rc': blob_fixup()
