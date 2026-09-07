@@ -12,25 +12,12 @@ PRODUCT_COPY_FILES += \
     vendor/nothing/metroid/proprietary/vendor/etc/res/images/default/charger/battery_fail.png:$(TARGET_COPY_OUT_VENDOR)/etc/res/images/default/charger/battery_fail.png \
     vendor/nothing/metroid/proprietary/vendor/etc/res/images/default/charger/battery_scale.png:$(TARGET_COPY_OUT_VENDOR)/etc/res/images/default/charger/battery_scale.png \
     vendor/nothing/metroid/proprietary/vendor/etc/richtapresources/notification/oi!.he:$(TARGET_COPY_OUT_VENDOR)/etc/richtapresources/notification/oi!.he \
-    vendor/nothing/metroid/proprietary/vendor/lib64/android.hardware.common-V2-ndk_platform.so:$(TARGET_COPY_OUT_VENDOR)/lib64/android.hardware.common-V2-ndk_platform.so \
-    vendor/nothing/metroid/proprietary/vendor/lib64/hw/android.hardware.bluetooth.audio@2.0-impl.so:$(TARGET_COPY_OUT_VENDOR)/lib64/hw/android.hardware.bluetooth.audio@2.0-impl.so \
-    vendor/nothing/metroid/proprietary/vendor/lib64/hw/android.hardware.renderscript@1.0-impl.so:$(TARGET_COPY_OUT_VENDOR)/lib64/hw/android.hardware.renderscript@1.0-impl.so \
-    vendor/nothing/metroid/proprietary/vendor/lib64/hw/audio.bluetooth.default.so:$(TARGET_COPY_OUT_VENDOR)/lib64/hw/audio.bluetooth.default.so \
-    vendor/nothing/metroid/proprietary/vendor/lib64/hw/audio.r_submix.default.so:$(TARGET_COPY_OUT_VENDOR)/lib64/hw/audio.r_submix.default.so \
-    vendor/nothing/metroid/proprietary/vendor/lib64/hw/audio.usb.default.so:$(TARGET_COPY_OUT_VENDOR)/lib64/hw/audio.usb.default.so \
-    vendor/nothing/metroid/proprietary/vendor/lib64/hw/fingerprint.default.so:$(TARGET_COPY_OUT_VENDOR)/lib64/hw/fingerprint.default.so \
-    vendor/nothing/metroid/proprietary/vendor/lib64/hw/sensors.dynamic_sensor_hal.so:$(TARGET_COPY_OUT_VENDOR)/lib64/hw/sensors.dynamic_sensor_hal.so \
-    vendor/nothing/metroid/proprietary/vendor/lib64/soundfx/libbundleaidl.so:$(TARGET_COPY_OUT_VENDOR)/lib64/soundfx/libbundleaidl.so \
-    vendor/nothing/metroid/proprietary/vendor/lib64/soundfx/libdownmixaidl.so:$(TARGET_COPY_OUT_VENDOR)/lib64/soundfx/libdownmixaidl.so \
-    vendor/nothing/metroid/proprietary/vendor/lib64/soundfx/libdynamicsprocessingaidl.so:$(TARGET_COPY_OUT_VENDOR)/lib64/soundfx/libdynamicsprocessingaidl.so \
-    vendor/nothing/metroid/proprietary/vendor/lib64/soundfx/libloudnessenhanceraidl.so:$(TARGET_COPY_OUT_VENDOR)/lib64/soundfx/libloudnessenhanceraidl.so \
-    vendor/nothing/metroid/proprietary/vendor/lib64/soundfx/libreverbaidl.so:$(TARGET_COPY_OUT_VENDOR)/lib64/soundfx/libreverbaidl.so \
-    vendor/nothing/metroid/proprietary/vendor/lib64/soundfx/libvisualizeraidl.so:$(TARGET_COPY_OUT_VENDOR)/lib64/soundfx/libvisualizeraidl.so \
+    vendor/nothing/metroid/proprietary/vendor/lib64/android.hardware.common-V2-ndk_platform.so:$(TARGET_COPY_OUT_VENDOR)/lib64/android.hardware.common-V2-ndk_platform.so
 
 
 # === METROID audio-only tranche (2026-07-09) — sound path; no VINTF decl, low boot risk ===
 PRODUCT_COPY_FILES += \
-    vendor/nothing/metroid/proprietary/vendor/bin/audioadsprpcd:$(TARGET_COPY_OUT_VENDOR)/bin/audioadsprpcd \
+    vendor/nothing/metroid/proprietary/vendor/bin/audioadsprpcd:$(TARGET_COPY_OUT_VENDOR)/bin/audioadsprpcd
 
 # === METROID wifi + missing-libs tranche (2026-07-09, Fable) ===
 # 1) stock wifi HAL service (AOSP generic has no vendor impl) + libs + wcn7750 driver cfg
@@ -42,7 +29,7 @@ PRODUCT_COPY_FILES += \
     vendor/nothing/metroid/proprietary/vendor/bin/hw/android.hardware.wifi-service:$(TARGET_COPY_OUT_VENDOR)/bin/hw/android.hardware.wifi-service \
     vendor/nothing/metroid/proprietary/vendor/etc/init/android.hardware.wifi-service.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/android.hardware.wifi-service.rc \
     vendor/nothing/metroid/proprietary/vendor/etc/wifi/wcn7750/WCNSS_qcom_cfg.ini:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wcn7750/WCNSS_qcom_cfg.ini \
-    vendor/nothing/metroid/proprietary/vendor/etc/wifi/wcn7750/WCNSS_qcom_cfg.ini:$(TARGET_COPY_OUT_VENDOR)/firmware/wlan/qca_cld/wcn7750/WCNSS_qcom_cfg.ini \
+    vendor/nothing/metroid/proprietary/vendor/etc/wifi/wcn7750/WCNSS_qcom_cfg.ini:$(TARGET_COPY_OUT_VENDOR)/firmware/wlan/qca_cld/wcn7750/WCNSS_qcom_cfg.ini
 
 # sensors: STOCK multihal rc (our packaged rc had `disabled` added during bring-up; with
 # ISensors now declared in VINTF, a non-started multihal = system_server watchdog boot-block).
@@ -75,7 +62,6 @@ PRODUCT_COPY_FILES += \
     vendor/nothing/metroid/proprietary/vendor/bin/vendor_modprobe.sh:$(TARGET_COPY_OUT_VENDOR)/bin/vendor_modprobe.sh \
     vendor/nothing/metroid/proprietary/vendor/bin/cnss_diag:$(TARGET_COPY_OUT_VENDOR)/bin/cnss_diag \
     vendor/nothing/metroid/proprietary/vendor/bin/hw/android.hardware.security.keymint-service-spu-qti:$(TARGET_COPY_OUT_VENDOR)/bin/hw/android.hardware.security.keymint-service-spu-qti \
-    vendor/nothing/metroid/proprietary/vendor/bin/hw/android.hardware.security.keymint-service.strongbox-thales:$(TARGET_COPY_OUT_VENDOR)/bin/hw/android.hardware.security.keymint-service.strongbox-thales \
     vendor/nothing/metroid/proprietary/vendor/bin/hw/android.hardware.sensors-service.multihal:$(TARGET_COPY_OUT_VENDOR)/bin/hw/android.hardware.sensors-service.multihal \
     vendor/nothing/metroid/proprietary/vendor/bin/hw/vendor.noth.hardware.charge-service:$(TARGET_COPY_OUT_VENDOR)/bin/hw/vendor.noth.hardware.charge-service \
     vendor/nothing/metroid/proprietary/vendor/bin/hw/vendor.qti.hardware.memtrack-service:$(TARGET_COPY_OUT_VENDOR)/bin/hw/vendor.qti.hardware.memtrack-service \
@@ -85,10 +71,6 @@ PRODUCT_COPY_FILES += \
     vendor/nothing/metroid/proprietary/vendor/bin/spu_install_keybox:$(TARGET_COPY_OUT_VENDOR)/bin/spu_install_keybox \
     vendor/nothing/metroid/proprietary/vendor/bin/wifidisplayhalservice:$(TARGET_COPY_OUT_VENDOR)/bin/wifidisplayhalservice \
     vendor/nothing/metroid/proprietary/vendor/lib64/hw/android.hardware.bluetooth.audio_sw.so:$(TARGET_COPY_OUT_VENDOR)/lib64/hw/android.hardware.bluetooth.audio_sw.so \
-    vendor/nothing/metroid/proprietary/vendor/lib64/hw/libaudiocorehal.default.so:$(TARGET_COPY_OUT_VENDOR)/lib64/hw/libaudiocorehal.default.so \
-    vendor/nothing/metroid/proprietary/vendor/lib64/hw/libaudiocorehal.qti.so:$(TARGET_COPY_OUT_VENDOR)/lib64/hw/libaudiocorehal.qti.so \
-    vendor/nothing/metroid/proprietary/vendor/lib64/hw/libaudioeffecthal.qti.so:$(TARGET_COPY_OUT_VENDOR)/lib64/hw/libaudioeffecthal.qti.so \
-    vendor/nothing/metroid/proprietary/vendor/lib64/libjc_keymint-thales.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libjc_keymint-thales.so \
     vendor/nothing/metroid/proprietary/vendor/lib64/libqapesdk.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libqapesdk.so \
     vendor/nothing/metroid/proprietary/vendor/lib64/libqcodec2_core.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libqcodec2_core.so \
     vendor/nothing/metroid/proprietary/vendor/lib64/libqtigefar.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libqtigefar.so \
@@ -100,8 +82,4 @@ PRODUCT_COPY_FILES += \
     vendor/nothing/metroid/proprietary/vendor/lib64/libwfdsessionmodule.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libwfdsessionmodule.so \
     vendor/nothing/metroid/proprietary/vendor/lib64/libwfdsourcesession_proprietary.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libwfdsourcesession_proprietary.so \
     vendor/nothing/metroid/proprietary/vendor/lib64/libwfdsourcesm_proprietary.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libwfdsourcesm_proprietary.so \
-    vendor/nothing/metroid/proprietary/vendor/lib64/soundfx/libqcompostprocbundle.so:$(TARGET_COPY_OUT_VENDOR)/lib64/soundfx/libqcompostprocbundle.so \
-    vendor/nothing/metroid/proprietary/vendor/lib64/soundfx/libqcomvisualizer.so:$(TARGET_COPY_OUT_VENDOR)/lib64/soundfx/libqcomvisualizer.so \
-    vendor/nothing/metroid/proprietary/vendor/lib64/soundfx/libqcomvoiceprocessing.so:$(TARGET_COPY_OUT_VENDOR)/lib64/soundfx/libqcomvoiceprocessing.so \
-    vendor/nothing/metroid/proprietary/vendor/lib64/soundfx/libvolumelistener.so:$(TARGET_COPY_OUT_VENDOR)/lib64/soundfx/libvolumelistener.so \
     vendor/nothing/metroid/proprietary/vendor/lib64/vendor.qti.hardware.wifidisplaysessionl@1.0-halimpl.so:$(TARGET_COPY_OUT_VENDOR)/lib64/vendor.qti.hardware.wifidisplaysessionl@1.0-halimpl.so

@@ -17,11 +17,11 @@ $(call inherit-product, device/nothing/metroid/device.mk)
 # Keep only Nothing's stock AW86938/RichTap implementation.
 PRODUCT_PACKAGES := $(filter-out vendor.qti.hardware.vibrator.service,$(PRODUCT_PACKAGES))
 
-# Same for thermal: device/qcom/sepolicy pulls the source HAL, and the stock blob
-# (android.hardware.thermal-service.qti.stock) installs under the same stem, so both
-# would generate .../symbols/vendor/bin/hw/android.hardware.thermal-service.qti and
-# ninja fails with dupbuild=err. Keep only the stock one -- it carries Nothing's
-# shell_max mapping and thresholds.
+# Same for thermal. The real fix is the soong_config guard on the source module
+# (metroid.stock_thermal, set in device.mk) -- filtering PRODUCT_PACKAGES alone does
+# NOT stop it building, because the source HAL is pulled in independently. Both install
+# under the same stem, so ninja fails with dupbuild=err on the symbols path. The stock
+# blob carries Nothing's shell_max mapping and thresholds. This line is belt-and-braces.
 PRODUCT_PACKAGES := $(filter-out android.hardware.thermal-service.qti,$(PRODUCT_PACKAGES))
 
 # Sign with our own release keys, not AOSP's public testkey (anyone can forge updates for that).

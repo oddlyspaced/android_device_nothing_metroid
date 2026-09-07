@@ -4,6 +4,7 @@ LOCAL_PATH := device/nothing/metroid
 # source provider's v5 fragment and install the matching stock declaration.
 $(call soong_config_set_bool, metroid, stock_bluetooth_audio, true)
 $(call soong_config_set_bool, metroid, stock_vibrator, true)
+$(call soong_config_set_bool, metroid, stock_thermal, true)
 
 # Qualcomm vendor linker namespace and the stock modem RFS topology. Widevine
 # needs liboemcrypto exported, while MPSS expects these paths for TFTP-backed data.
@@ -196,6 +197,14 @@ PRODUCT_COPY_FILES += \
 # Display HALs (b20): build from source (hardware/qcom-caf/sm8750/display is its own soong namespace)
 PRODUCT_SOONG_NAMESPACES += hardware/qcom-caf/sm8750/display
 
+# WLAN HAL namespace. The stock libwifi-hal{,-qcom,-ctrl} blobs were dropped because they
+# duplicate the source modules' install paths (ninja dupbuild=err), so the source must be
+# buildable for this product -- importing the namespace in the generated vendor Android.bp
+# only makes it visible for dependency resolution, it does not activate it. Without this,
+# cnss_diag fails with 'depends on undefined module "libwifi-hal-ctrl"'.
+PRODUCT_SOONG_NAMESPACES += hardware/qcom-caf/wlan
+PRODUCT_SOONG_NAMESPACES += hardware/qcom-caf/wlan/qcwcn
+
 # Stock Thermal HAL carries Nothing's shell_max mapping and thresholds. Its
 # userspace shell-temperature producer is packaged as sltntc by the private
 # extraction tree.
@@ -268,8 +277,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/etc/fstab.emmc:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.emmc \
     $(LOCAL_PATH)/rootdir/etc/fstab.qcom:$(TARGET_COPY_OUT_RAMDISK)/fstab.qcom \
     $(LOCAL_PATH)/rootdir/etc/fstab.qcom:$(TARGET_COPY_OUT_RAMDISK)/first_stage_ramdisk/fstab.qcom \
-    vendor/nothing/metroid/proprietary/vendor/lib64/libkeymaster_messages.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libkeymaster_messages.so \
-    vendor/nothing/metroid/proprietary/vendor/lib64/libwfdaac_vendor.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libwfdaac_vendor.so \
     $(LOCAL_PATH)/rootdir/etc/fstab.qcom:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/fstab.qcom \
     $(LOCAL_PATH)/rootdir/etc/fstab.qcom:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.qcom
 
@@ -320,18 +327,18 @@ PRODUCT_PRECOMPILED_SEPOLICY := false
 #   NothingToy/Magicball/Leveler = first-party Glyph Matrix toys
 # Prebuilt modules + certificates defined in vendor/nothing/metroid/glyph/Android.mk
 # ---------------------------------------------------------------------------
-# PRODUCT_PACKAGES += \
-#     NtThirdParty \
-#     GlyphNotification \
-#     NothingToy \
-#     Magicball \
+# PRODUCT_PACKAGES +=
+#     NtThirdParty
+#     GlyphNotification
+#     NothingToy
+#     Magicball
 #     Leveler
 
 # Glyph sysconfig XML (privapp-permissions xml already copied by metroid-vendor.mk).
 # Disabled with the Glyph packages above: vendor/nothing/metroid/glyph/ is a hand-maintained
 # directory that extract-files.py does not produce, so this copy fails on a clean vendor tree.
 # Re-enable together with the PRODUCT_PACKAGES block above.
-# PRODUCT_COPY_FILES += \
+# PRODUCT_COPY_FILES +=
 #     vendor/nothing/metroid/glyph/etc/sysconfig/com.nothing.glyphnotification.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/sysconfig/com.nothing.glyphnotification.xml
 
 # OPUS bring-up: EARLY (system build.prop, before zygote) props — /vendor/build.prop loads too late here.
