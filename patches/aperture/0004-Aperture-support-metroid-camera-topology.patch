@@ -1,4 +1,4 @@
-From 9027c802bd75b7c4a52b24c1212372e1714fd472 Mon Sep 17 00:00:00 2001
+From 3462b1ac0b42c142ee449f170c23932624a582d7 Mon Sep 17 00:00:00 2001
 From: logix727 <logix727@users.noreply.github.com>
 Date: Tue, 4 Aug 2026 08:10:20 -0400
 Subject: [PATCH 4/4] Aperture: support metroid camera topology
@@ -15,13 +15,13 @@ Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01RTyThMzCkh5fd3Ct1JP62p
 Change-Id: Ie277b593c47e68575757dec99a73f82c9f867a75
 ---
- .../lineageos/aperture/ApertureApplication.kt | 40 ++++++++++-
+ .../lineageos/aperture/ApertureApplication.kt | 42 +++++++++++-
  .../aperture/repositories/CameraRepository.kt |  7 ++
  .../aperture/viewmodels/CameraViewModel.kt    | 67 ++++++++++++++++---
- 3 files changed, 104 insertions(+), 10 deletions(-)
+ 3 files changed, 106 insertions(+), 10 deletions(-)
 
 diff --git a/app/src/main/java/org/lineageos/aperture/ApertureApplication.kt b/app/src/main/java/org/lineageos/aperture/ApertureApplication.kt
-index d64c48a..7e5ccb7 100644
+index d64c48a..ffe7b36 100644
 --- a/app/src/main/java/org/lineageos/aperture/ApertureApplication.kt
 +++ b/app/src/main/java/org/lineageos/aperture/ApertureApplication.kt
 @@ -7,7 +7,14 @@ package org.lineageos.aperture
@@ -48,7 +48,7 @@ index d64c48a..7e5ccb7 100644
      private val coroutineScope = MainScope()
  
      val cameraRepository by lazy { CameraRepository(this, coroutineScope, overlaysRepository) }
-@@ -23,6 +30,37 @@ class ApertureApplication : Application() {
+@@ -23,6 +30,39 @@ class ApertureApplication : Application() {
      val overlaysRepository by lazy { OverlaysRepository(this) }
      val preferencesRepository by lazy { PreferencesRepository(this, coroutineScope) }
  
@@ -64,8 +64,10 @@ index d64c48a..7e5ccb7 100644
 +        )
 +
 +        return CameraXConfig.Builder.fromConfig(defaultConfig)
-+            .setUseCaseConfigFactoryProvider { context ->
-+                val defaultFactory = defaultFactoryProvider.newInstance(context)
++            .setUseCaseConfigFactoryProvider { context, isPreviewResolutionBypassEnabled ->
++                val defaultFactory = defaultFactoryProvider.newInstance(
++                    context, isPreviewResolutionBypassEnabled
++                )
 +
 +                UseCaseConfigFactory { captureType, captureMode ->
 +                    val useCaseConfig = defaultFactory.getConfig(captureType, captureMode)

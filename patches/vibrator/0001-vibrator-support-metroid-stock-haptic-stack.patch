@@ -1,30 +1,19 @@
-From 893436eced4f7535899b8fac559470743fcaba76 Mon Sep 17 00:00:00 2001
+From 623ae4c808b59eca080e6e42d3ad3aadddf15287 Mon Sep 17 00:00:00 2001
 From: logix727 <logix727@users.noreply.github.com>
 Date: Tue, 4 Aug 2026 08:10:20 -0400
 Subject: [PATCH] vibrator: support metroid stock haptic stack
 
 Change-Id: Icc1e2b19fdbc4dbf195e46af2ec666581e70308a
 ---
- aidl/Android.bp                              |  13 +-
- aidl/VibratorCL/Android.bp                   |  21 +--
- aidl/VibratorOL/Android.bp                   |   2 +-
- aidl/VibratorSelector/Android.bp             |   2 +-
+ aidl/Android.bp                              |   7 +
+ aidl/VibratorCL/Android.bp                   |  19 +--
  aidl/vendor.qti.hardware.vibrator.service.rc | 155 ++++++++++++++++++-
- 5 files changed, 173 insertions(+), 20 deletions(-)
+ 3 files changed, 167 insertions(+), 14 deletions(-)
 
 diff --git a/aidl/Android.bp b/aidl/Android.bp
-index e05ee96..2f533ce 100644
+index e05ee96..745584e 100644
 --- a/aidl/Android.bp
 +++ b/aidl/Android.bp
-@@ -16,7 +16,7 @@ cc_library_shared {
-         "libutils",
-         "liblog",
-         "libbinder_ndk",
--        "android.hardware.vibrator-V2-ndk",
-+        "android.hardware.vibrator-V3-ndk",
-         "vendor.qti.hardware.vibratorOL.impl",
-         "vendor.qti.hardware.vibratorSel.impl",
-     ] + select(soong_config_variable("qti_vibrator", "use_libpalclient"), {
 @@ -31,6 +31,10 @@ cc_library_shared {
  
  cc_binary {
@@ -46,26 +35,8 @@ index e05ee96..2f533ce 100644
      srcs: [
          "service.cpp",
      ],
-@@ -46,7 +53,7 @@ cc_binary {
-         "libutils",
-         "libbase",
-         "libbinder_ndk",
--        "android.hardware.vibrator-V2-ndk",
-+        "android.hardware.vibrator-V3-ndk",
-         "vendor.qti.hardware.vibrator.impl",
-     ],
- }
-@@ -62,7 +69,7 @@ cc_fuzz {
-         "libcutils",
-         "libbinder",
-         "libbinder_ndk",
--        "android.hardware.vibrator-V2-ndk",
-+        "android.hardware.vibrator-V3-ndk",
-         "vendor.qti.hardware.vibrator.impl",
-     ],
- 
 diff --git a/aidl/VibratorCL/Android.bp b/aidl/VibratorCL/Android.bp
-index d220a94..3826112 100644
+index d220a94..5838a38 100644
 --- a/aidl/VibratorCL/Android.bp
 +++ b/aidl/VibratorCL/Android.bp
 @@ -6,21 +6,16 @@ cc_library_shared {
@@ -87,8 +58,7 @@ index d220a94..3826112 100644
 +    ],
  
      shared_libs: [
--        "android.hardware.vibrator-V2-ndk",
-+        "android.hardware.vibrator-V3-ndk",
+         "android.hardware.vibrator-V2-ndk",
          "libbinder_ndk",
          "liblog",
 -    ] + select(soong_config_variable("qti_vibrator", "libpalclient_namespace"), {
@@ -97,32 +67,6 @@ index d220a94..3826112 100644
 -    }),
 +        "//hardware/qcom-caf/sm8750/audio/pal:libpalclient",
 +    ],
- }
-\ No newline at end of file
-diff --git a/aidl/VibratorOL/Android.bp b/aidl/VibratorOL/Android.bp
-index fb2d3d9..0aa09e0 100644
---- a/aidl/VibratorOL/Android.bp
-+++ b/aidl/VibratorOL/Android.bp
-@@ -15,7 +15,7 @@ cc_library_shared {
-         "liblog",
-         "libqtivibratoreffectoffload",
-         "libbinder_ndk",
--        "android.hardware.vibrator-V2-ndk",
-+        "android.hardware.vibrator-V3-ndk",
-     ] + select(soong_config_variable("qti_vibrator", "effect_lib"), {
-         any @ value: [value],
-         default: ["libqtivibratoreffect"],
-diff --git a/aidl/VibratorSelector/Android.bp b/aidl/VibratorSelector/Android.bp
-index aaa1893..976003e 100644
---- a/aidl/VibratorSelector/Android.bp
-+++ b/aidl/VibratorSelector/Android.bp
-@@ -13,6 +13,6 @@ cc_library_shared {
-         "liblog",
-         "libbinder_ndk",
-         "libexpat",
--        "android.hardware.vibrator-V2-ndk",
-+        "android.hardware.vibrator-V3-ndk",
-     ],
  }
 \ No newline at end of file
 diff --git a/aidl/vendor.qti.hardware.vibrator.service.rc b/aidl/vendor.qti.hardware.vibrator.service.rc

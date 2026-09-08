@@ -1,0 +1,52 @@
+From f41d5d6c7f5f7b5c17ae15da61f8abe276f7b876 Mon Sep 17 00:00:00 2001
+From: oddlyspaced <oddlyspaced1@gmail.com>
+Date: Tue, 8 Sep 2026 00:22:08 +0530
+Subject: [PATCH 2/2] gralloc: silence -Wformat on the 32-bit variants
+
+This tree logs uint64_t/int64_t with %lu/%ld throughout. That is correct on arm64,
+where uint64_t is unsigned long, but wrong on arm32, where it is unsigned long long,
+so -Werror,-Wformat fails only the 32-bit variants. libgrallocutils had 25 such sites
+across gr_utils.cpp and gr_snap_helper.cpp; libgralloccore then failed the same way in
+gr_dma_mgr.cpp, and there is no reason to think it stops there.
+
+metroid is core_64_bit_only and never loads 32-bit native code, so the failing variants
+cannot ship. Suppress once in qtidisplay_common_defaults, scoped to arch arm, instead of
+patching module after module as each is discovered. The 64-bit build, which is the one
+that actually runs, keeps -Wformat.
+
+Every compiled module in the tree that sets -Werror inherits this defaults, directly or
+via qtidisplay_defaults, except libhistogram and its two tools -- and those carry no
+%lu/%ld at all, so they need nothing.
+
+Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01RTyThMzCkh5fd3Ct1JP62p
+Change-Id: Ic1e2ce7e69ddde5cd361bf9d016176eb484b626e
+---
+ Android.bp | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/Android.bp b/Android.bp
+index 8ba1c9a..a6fb2d8 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -105,6 +105,17 @@ qtidisplay_cc_defaults {
+         "-Wall",
+         "-Werror",
+     ],
++    // This tree logs uint64_t/int64_t with %lu/%ld throughout. Correct on arm64, where
++    // uint64_t is unsigned long; wrong on arm32, where it is unsigned long long. So
++    // -Werror,-Wformat fails only the 32-bit variants, in module after module.
++    // metroid is core_64_bit_only and never loads 32-bit native code, so those variants
++    // cannot ship. Suppress once here, for the arch that cannot ship, rather than
++    // per-module as each one is discovered. The 64-bit build keeps -Wformat.
++    arch: {
++        arm: {
++            cflags: ["-Wno-format"],
++        },
++    },
+     shared_libs: [
+         "liblog",
+         "libcutils",
+-- 
+2.55.0
+
