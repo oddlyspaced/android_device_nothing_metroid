@@ -15,17 +15,33 @@ The LineageOS charter permits this explicitly:
 
 | file | provenance |
 |---|---|
-| `Image` | `6.6.102-android15-8-gab8eb70a71b8-ab14350911-4k`, built by `kleaf@build-host` 2025-10-29. Google GKI build `ab14350911`. Shipped by Nothing on Nothing OS `Metroid_B4.0-250917-1218`. |
+| `Image` | `6.6.127-android15-8-g1a9b880d342b-ab15218529-4k`, built by `kleaf@build-host` 2026-04-16. Google GKI build `ab15218529`. Shipped by Nothing on Nothing OS `Metroid_B4.1-260814-1733`. sha256 `86dc875428d1e365fa76382dca5035d50b2c87381e4ec639e641d4b8adc5f97f`. |
 | `system_dlkm/` | 93 modules from Google GKI build `ab13768703`, plus `rfkill.ko` and `tipc.ko` from `ab14350911` and `zram.ko` from `ab13562137`. The matched TIPC module is required by Qualcomm NICM/DSI; the shipped `ab13768703` TIPC module is rejected by this GKI for a protected-symbol mismatch. |
 
 Exact public corresponding-source records:
 
 | Artifact set | Android CI build | Immutable `kernel/common` source | Build configuration |
 |---|---|---|---|
-| `Image` | [`14350911/kernel_aarch64`](https://ci.android.com/builds/submitted/14350911/kernel_aarch64/latest) | [`ab8eb70a71b8906e3ceac53d2b10f027f8774bcb`](https://android.googlesource.com/kernel/common/+/ab8eb70a71b8906e3ceac53d2b10f027f8774bcb) | [`build.config.gki.aarch64`](https://android.googlesource.com/kernel/common/+/ab8eb70a71b8906e3ceac53d2b10f027f8774bcb/build.config.gki.aarch64) |
+| `Image` | [`15218529/kernel_aarch64`](https://ci.android.com/builds/submitted/15218529/kernel_aarch64/latest) | `1a9b880d342b` (abbreviated; from the kernel version string) | `build.config.gki.aarch64` |
 | 93 `system_dlkm` modules | [`13768703/kernel_aarch64`](https://ci.android.com/builds/submitted/13768703/kernel_aarch64/latest) | [`c2569c3b141cb39a6c2bca63c62697589fe86dc4`](https://android.googlesource.com/kernel/common/+/c2569c3b141cb39a6c2bca63c62697589fe86dc4) | [`build.config.gki.aarch64`](https://android.googlesource.com/kernel/common/+/c2569c3b141cb39a6c2bca63c62697589fe86dc4/build.config.gki.aarch64) |
 | `rfkill.ko`, `tipc.ko` | [`14350911/kernel_aarch64`](https://ci.android.com/builds/submitted/14350911/kernel_aarch64/latest) | [`ab8eb70a71b8906e3ceac53d2b10f027f8774bcb`](https://android.googlesource.com/kernel/common/+/ab8eb70a71b8906e3ceac53d2b10f027f8774bcb) | same as `Image` |
 | `zram.ko` | [`13562137/kernel_aarch64`](https://ci.android.com/builds/submitted/13562137/kernel_aarch64/latest) | [`bde0c41169f4fa2e4e2579e4bcd1431c6e2c0845`](https://android.googlesource.com/kernel/common/+/bde0c41169f4fa2e4e2579e4bcd1431c6e2c0845) | [`build.config.gki.aarch64`](https://android.googlesource.com/kernel/common/+/bde0c41169f4fa2e4e2579e4bcd1431c6e2c0845/build.config.gki.aarch64) |
+
+## Why 6.6.127 and not the older 6.6.102 pin
+
+This directory previously pinned `6.6.102-android15-8-gab8eb70a71b8-ab14350911-4k`, the GKI
+shipped with **`Metroid_B4.0-250917-1218`**. That is the wrong pin for this tree: the vendor
+blobs are extracted from **`Metroid_B4.1-260814-1733`**, and B4.1 ships
+`6.6.127-android15-8-g1a9b880d342b-ab15218529-4k`.
+
+Verified on 2026-09-08 by unpacking both boot images: the kernel in the B4.1 stock `boot.img`
+and the kernel in the LineageOS reference build `lineage-23.0-20260902-UNOFFICIAL-metroid.zip`
+are **byte-identical**, sha256
+`86dc875428d1e365fa76382dca5035d50b2c87381e4ec639e641d4b8adc5f97f`. The stock firmware and the
+only known-booting build of this tree agree; the committed 6.6.102 prebuilt agreed with neither.
+
+Symptom of the mismatch: the device reaches `system_server` (all seven dm-verity tables built,
+237 vendor modules loaded, no load failures) and then hangs before the boot animation.
 
 Both source revisions specify Clang `r510928` in `build.config.constants`.
 The third `zram.ko` source revision also specifies Clang `r510928`.
