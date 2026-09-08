@@ -79,6 +79,18 @@ lib_fixups: lib_fixups_user_type = {
         # satisfies both. WFD is not boot-critical; drop the declared edge so the graph
         # resolves. If WiFi Display misbehaves, this is the first thing to revisit.
         'android.hardware.audio.core-V2-ndk',
+        'libcodec2_vndk',
+        'libqcodec2_utils',
+        'libgralloccore',
+        'libgrallocutils',
+        'libmapperutils',
+        # libcamximageformatutils links graphics.allocator V1 and V2 directly, and soong
+        # refuses two versions of one aidl_interface in one module. V2 is built for vendor
+        # anyway by our display HAL; V1 is wanted only by blobs. So drop the declared V1
+        # edges and ship the V1 .so instead -- it installs via PRODUCT_PACKAGES so the
+        # library is present for the 7 blobs that link it, while nothing resolves the source
+        # V1 interface and the graph holds a single version.
+        'android.hardware.graphics.allocator-V1-ndk',
     ): lib_fixup_remove,
     (
     ): lib_fixup_partition_suffix('system'),
@@ -184,7 +196,6 @@ lib_fixups: lib_fixups_user_type = {
         'vendor.qti.snapdragonServices-V1-ndk',
         'vendor.qti.snapdragonServices.qape-V1-ndk',
         'vendor.qti.syshealthmon-V1-ndk',
-        'android.hardware.graphics.allocator-V1-ndk',
     ): lib_fixup_partition_suffix('vendor'),
 }
 
