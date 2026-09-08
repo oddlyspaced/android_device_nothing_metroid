@@ -2,6 +2,14 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
+# Pico GMS, not full. metroid's super partition is 8.50 GiB and stock already fills
+# 99.25% of it (9058279424 of 9126805504), so there is essentially no room to grow.
+# Full GMS adds 2.09 GiB of apps and overflows the super by 2.33 GiB. Pico keeps
+# Phonesky, GmsCore and GoogleServicesFramework -- Play Store works, and everything it
+# drops (Velvet, Photos, Recorder, ARCore, the Pixel wallpapers) reinstalls from Play.
+# Must be set BEFORE common_full_phone.mk, which reads it to pick the gms_*.mk variant.
+TARGET_USES_PICO_GAPPS := true
+
 # Inherit some common Lineage stuff.
 # NOTE: on an Evolution X tree this resolves to Evo's own config -- Evo checks its
 # vendor_evolution repo out at vendor/lineage and reuses the Lineage build system.

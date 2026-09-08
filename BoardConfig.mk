@@ -220,7 +220,14 @@ TARGET_COPY_OUT_ODM := odm
 BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_SYSTEM_EXTIMAGE_PARTITION_RESERVED_SIZE := 67108864
 BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_PRODUCTIMAGE_PARTITION_RESERVED_SIZE := 1288490188
+# No product reserve. This device cannot afford one: super is 9126805504 and stock already
+# occupies 9058279424 of it (99.25%), so a 1.2 GiB reserve is 14% of the whole partition.
+# vendor/lineage/config/BoardConfigReservedSize.mk takes the same position -- it skips the
+# reserved sizes entirely when WITH_GMS is true -- but this tree set the value
+# unconditionally, which bypassed that policy. With pico GMS and no product reserve the
+# super comes to ~8.41 GiB against 8.50 GiB available.
+# The system/system_ext reserves below are only 64 MiB each and are kept.
+BOARD_PRODUCTIMAGE_PARTITION_RESERVED_SIZE := 0
 BOARD_ODMIMAGE_FILE_SYSTEM_TYPE := erofs
 
 # vendor_dlkm/system_dlkm: stock fstab first-stage-mounts these. They MUST be
