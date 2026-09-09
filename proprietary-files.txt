@@ -3275,7 +3275,6 @@ vendor/lib64/libtfestriping.so
 vendor/lib64/libthermalclient.so
 vendor/lib64/libthreadutils.so
 vendor/lib64/libtime_genoff.so
-vendor/lib64/libtinyxml2_1.so
 vendor/lib64/libtlpd.so
 vendor/lib64/libtlpd_configmgr.so
 vendor/lib64/libtlpd_crypto.so
@@ -3660,3 +3659,29 @@ vendor/product/media/audio/ui/camera_click.ogg
 vendor/product/media/audio/ui/camera_focus.ogg
 vendor/product/media/audio/ui/screenshot.ogg
 vendor/rfs/rfs_symlinks
+
+# Display stack -- restored 2026-09-09, NARROW fix.
+#
+# vendor.qti.hardware.display.composer-service is built from source (as upstream does),
+# but it links Nothing's SDM/gralloc libraries. Building those from source instead produced
+# libraries 15-20% smaller than the ones the composer expects, and it died on tagged-pointer
+# truncation and a ubsan mul-overflow -- taking SurfaceFlinger, then system_server, then
+# zygote, giving a black screen. These are the libraries logix's booting build ships as blobs.
+vendor/lib64/libdisplayconfig.qti.so
+vendor/lib64/libdisplaydebug.so
+vendor/lib64/libdrmutils.so
+vendor/lib64/libgpu_tonemapper.so
+vendor/lib64/libgralloccore.so
+vendor/lib64/libgralloc.qti.so
+vendor/lib64/libgrallocutils.so
+vendor/lib64/libhistogram.so
+vendor/lib64/libmapperutils.so
+vendor/lib64/libqdMetaData.so
+vendor/lib64/libqdutils.so
+vendor/lib64/libqservice.so
+vendor/lib64/libsdedrm.so
+vendor/lib64/libsdmclient.so
+vendor/lib64/libsdmcore.so
+vendor/lib64/libsdmdal.so
+vendor/lib64/libsdmutils.so
+vendor/lib64/libtinyxml2_1.so
