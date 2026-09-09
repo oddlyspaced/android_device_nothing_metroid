@@ -91,6 +91,16 @@ lib_fixups: lib_fixups_user_type = {
         # library is present for the 7 blobs that link it, while nothing resolves the source
         # V1 interface and the graph holds a single version.
         'android.hardware.graphics.allocator-V1-ndk',
+        'libgui',
+        'libui',
+        'libwfdcommonutils',
+        # libgralloctypes (restored: it is the gralloc metadata ABI) declares
+        # graphics.common-V5, while camera.device-V2 pulls V7 -- two versions of one
+        # aidl_interface in camx.device-impl. Shipping V5 as a prebuilt duplicates the
+        # platform's vendor variant, which proves the platform installs V5 regardless.
+        # So drop the declared edge: the library is still on disk for anything that links
+        # it, and only V7 resolves as an interface.
+        'android.hardware.graphics.common-V5-ndk',
     ): lib_fixup_remove,
     (
     ): lib_fixup_partition_suffix('system'),
